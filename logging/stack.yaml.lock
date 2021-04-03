@@ -59,6 +59,19 @@ packages:
     url: https://github.com/kowainik/co-log/archive/d2c7ad66af4e79c7a8f8d5e6c324ea3ff2739277.tar.gz
 - completed:
     size: 18250
+    subdir: packages/chronos
+    url: https://github.com/tek/polysemy-time/archive/5a3c501f21967159bf639b7140c17d0259408ee0.tar.gz
+    name: polysemy-chronos
+    version: 0.1.1.0
+    sha256: 479e36698a8f951069d225e0e319f02ecfd406d9bb1b203b2686d71a3ec3ab3c
+    pantry-tree:
+      size: 550
+      sha256: f0b05dce7843ca1b30c3b99131d302a91eeec6c19fe7c4917bb427ce9b47e251
+  original:
+    subdir: packages/chronos
+    url: https://github.com/tek/polysemy-time/archive/5a3c501f21967159bf639b7140c17d0259408ee0.tar.gz
+- completed:
+    size: 18250
     subdir: packages/time
     url: https://github.com/tek/polysemy-time/archive/5a3c501f21967159bf639b7140c17d0259408ee0.tar.gz
     name: polysemy-time

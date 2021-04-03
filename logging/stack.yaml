@@ -49,6 +49,7 @@ extra-deps:
   - github: tek/polysemy-time
     commit: 5a3c501f21967159bf639b7140c17d0259408ee0
     subdirs:
+      - packages/chronos
       - packages/time
   - github: tek/polysemy-conc
     commit: 28bd2ef2a7ceaa82d4478d98884287fb5fe17e9f
