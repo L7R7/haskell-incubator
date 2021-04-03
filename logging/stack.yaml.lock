@@ -5,33 +5,12 @@
 
 packages:
 - completed:
-    hackage: co-log-polysemy-0.0.1.2@sha256:a6ea6103f5ca806dc16bcdbb666ee2ebafdbbf36a9626f33103105a41a55d561,3645
-    pantry-tree:
-      size: 400
-      sha256: 56ddcbaf126c9e557d7e1336c6d1a9044567676dcdbc24fab34907d9a5725f73
-  original:
-    hackage: co-log-polysemy-0.0.1.2@sha256:a6ea6103f5ca806dc16bcdbb666ee2ebafdbbf36a9626f33103105a41a55d561,3645
-- completed:
     hackage: polysemy-1.5.0.0@sha256:7edb723e7f703fe273a40e43fe33f6e8f7659fe60759e8698def1481262d314d,6246
     pantry-tree:
       size: 4438
       sha256: 7b7d379751f79f0e0e5afcdf3d8092e5b8e04515710f21f514aa8f29ce4835f4
   original:
     hackage: polysemy-1.5.0.0@sha256:7edb723e7f703fe273a40e43fe33f6e8f7659fe60759e8698def1481262d314d,6246
-- completed:
-    hackage: polysemy-log-0.2.0.0@sha256:ae0790fd49df2c994dba1f884336ebd1181b806aaa85ba846080657820886368,5327
-    pantry-tree:
-      size: 1591
-      sha256: 4d95d635c7c674a41cfe924fc1d8c511f3bd6fee88b18e1af0ff4ab94088b1b0
-  original:
-    hackage: polysemy-log-0.2.0.0@sha256:ae0790fd49df2c994dba1f884336ebd1181b806aaa85ba846080657820886368,5327
-- completed:
-    hackage: polysemy-log-co-0.2.0.0@sha256:4909bea427ce5ef01c4cb5a4e79b26939992a435ace2bc0d839b6b645badc656,5169
-    pantry-tree:
-      size: 708
-      sha256: 85bc1f05722787f893de687b8dc825ad50fad908eb10a4fe42d1428232aa4c75
-  original:
-    hackage: polysemy-log-co-0.2.0.0@sha256:4909bea427ce5ef01c4cb5a4e79b26939992a435ace2bc0d839b6b645badc656,5169
 - completed:
     hackage: polysemy-plugin-0.3.0.0@sha256:22e7553d0fddb48d9484ba1c71d2ed825213fcb214866d9b502ee02bfb960cb4,3121
     pantry-tree:
@@ -40,12 +19,77 @@ packages:
   original:
     hackage: polysemy-plugin-0.3.0.0@sha256:22e7553d0fddb48d9484ba1c71d2ed825213fcb214866d9b502ee02bfb960cb4,3121
 - completed:
-    hackage: polysemy-time-0.1.2.0@sha256:14dbb760f06c7a55a56d80891e1f1968aa56bbabfa71f067f02a65e9e7cc0f67,5079
+    size: 23171
+    subdir: packages/polysemy-log
+    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+    name: polysemy-log
+    version: 0.2.1.0
+    sha256: 278523b1c75afc79c7c078b33bf89418a00504fa53a6d740cda606362749219f
+    pantry-tree:
+      size: 1592
+      sha256: d49b2b5743d6389e117db5689c7b3af601f6439c736b4d4a73506a862418238f
+  original:
+    subdir: packages/polysemy-log
+    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+- completed:
+    size: 23171
+    subdir: packages/polysemy-log-co
+    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+    name: polysemy-log-co
+    version: 0.2.1.0
+    sha256: 278523b1c75afc79c7c078b33bf89418a00504fa53a6d740cda606362749219f
+    pantry-tree:
+      size: 708
+      sha256: d2683bdc972269f05ad29fa95026f77293fed20921a50352c304404bf3d648f7
+  original:
+    subdir: packages/polysemy-log-co
+    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+- completed:
+    size: 48370
+    subdir: co-log-polysemy
+    url: https://github.com/kowainik/co-log/archive/d2c7ad66af4e79c7a8f8d5e6c324ea3ff2739277.tar.gz
+    name: co-log-polysemy
+    version: 0.0.1.2
+    sha256: 38b41b7ee82026b6a16dd37ed82af55c6f7d68d769926376627b900ce0400dad
+    pantry-tree:
+      size: 400
+      sha256: 62c6f8a5fcfdc902e7b4b47e0e38038b8ff6396878f855d354861e7d7f08db6f
+  original:
+    subdir: co-log-polysemy
+    url: https://github.com/kowainik/co-log/archive/d2c7ad66af4e79c7a8f8d5e6c324ea3ff2739277.tar.gz
+- completed:
+    size: 18250
+    subdir: packages/time
+    url: https://github.com/tek/polysemy-time/archive/5a3c501f21967159bf639b7140c17d0259408ee0.tar.gz
+    name: polysemy-time
+    version: 0.1.1.0
+    sha256: 479e36698a8f951069d225e0e319f02ecfd406d9bb1b203b2686d71a3ec3ab3c
     pantry-tree:
       size: 1278
-      sha256: 9a0ff71d6b3dec5a7bc3438f1fbe55a5c960a380c556373d7c82d3a4994c6131
+      sha256: 0fa0847ffeea83f68cb3df57994d93dcc907bfc6e178a9282f26c6a55bf5660a
   original:
-    hackage: polysemy-time-0.1.2.0@sha256:14dbb760f06c7a55a56d80891e1f1968aa56bbabfa71f067f02a65e9e7cc0f67,5079
+    subdir: packages/time
+    url: https://github.com/tek/polysemy-time/archive/5a3c501f21967159bf639b7140c17d0259408ee0.tar.gz
+- completed:
+    size: 17295
+    subdir: packages/conc
+    url: https://github.com/tek/polysemy-conc/archive/28bd2ef2a7ceaa82d4478d98884287fb5fe17e9f.tar.gz
+    name: polysemy-conc
+    version: 0.1.0.0
+    sha256: 9f00f045e36c59956fe5a8f651c78d347d9fce63ccc23bff6e1eafd23a8afb32
+    pantry-tree:
+      size: 1747
+      sha256: 22f75285a55167662fbc93d47d355f7a05c13bbb584aa2a2a334965700a4208f
+  original:
+    subdir: packages/conc
+    url: https://github.com/tek/polysemy-conc/archive/28bd2ef2a7ceaa82d4478d98884287fb5fe17e9f.tar.gz
+- completed:
+    hackage: aeson-1.4.7.1@sha256:6d8d2fd959b7122a1df9389cf4eca30420a053d67289f92cdc0dbc0dab3530ba,7098
+    pantry-tree:
+      size: 40133
+      sha256: caa9306e519c601ab0170d113daa03c1163db53e5466be2968bbd61a771bebcb
+  original:
+    hackage: aeson-1.4.7.1@sha256:6d8d2fd959b7122a1df9389cf4eca30420a053d67289f92cdc0dbc0dab3530ba,7098
 snapshots:
 - completed:
     size: 565720
