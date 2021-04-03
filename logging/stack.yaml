@@ -35,8 +35,10 @@ packages:
 # forks / in-progress versions pinned to a git hash. For example:
 #
 extra-deps:
+  - co-log-polysemy-0.0.1.2@sha256:a6ea6103f5ca806dc16bcdbb666ee2ebafdbbf36a9626f33103105a41a55d561,3645
   - polysemy-1.5.0.0@sha256:7edb723e7f703fe273a40e43fe33f6e8f7659fe60759e8698def1481262d314d,6246
   - polysemy-log-0.2.0.0@sha256:ae0790fd49df2c994dba1f884336ebd1181b806aaa85ba846080657820886368,5327
+  - polysemy-log-co-0.2.0.0@sha256:4909bea427ce5ef01c4cb5a4e79b26939992a435ace2bc0d839b6b645badc656,5169
   - polysemy-plugin-0.3.0.0@sha256:22e7553d0fddb48d9484ba1c71d2ed825213fcb214866d9b502ee02bfb960cb4,3121
   - polysemy-time-0.1.2.0@sha256:14dbb760f06c7a55a56d80891e1f1968aa56bbabfa71f067f02a65e9e7cc0f67,5079
 
@@ -69,4 +71,3 @@ extra-deps:
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
-allow-newer: true
