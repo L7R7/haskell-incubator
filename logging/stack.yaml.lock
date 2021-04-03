@@ -19,31 +19,31 @@ packages:
   original:
     hackage: polysemy-plugin-0.3.0.0@sha256:22e7553d0fddb48d9484ba1c71d2ed825213fcb214866d9b502ee02bfb960cb4,3121
 - completed:
-    size: 23171
+    size: 23137
     subdir: packages/polysemy-log
-    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+    url: https://github.com/tek/polysemy-log/archive/9a8027c887001876e0cd5bed77d2d90453335b09.tar.gz
     name: polysemy-log
-    version: 0.2.1.0
-    sha256: 278523b1c75afc79c7c078b33bf89418a00504fa53a6d740cda606362749219f
+    version: 0.2.2.0
+    sha256: ef204534b53a8d2254ba7f9dcf6c81eb343e6b4f6b4cfc056df40edd7759afbd
     pantry-tree:
       size: 1592
-      sha256: d49b2b5743d6389e117db5689c7b3af601f6439c736b4d4a73506a862418238f
+      sha256: 87a9eb73cc8e2af1c76204b0ee8f949919c56228214a21caa506f77d1fbace68
   original:
     subdir: packages/polysemy-log
-    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+    url: https://github.com/tek/polysemy-log/archive/9a8027c887001876e0cd5bed77d2d90453335b09.tar.gz
 - completed:
-    size: 23171
+    size: 23137
     subdir: packages/polysemy-log-co
-    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+    url: https://github.com/tek/polysemy-log/archive/9a8027c887001876e0cd5bed77d2d90453335b09.tar.gz
     name: polysemy-log-co
-    version: 0.2.1.0
-    sha256: 278523b1c75afc79c7c078b33bf89418a00504fa53a6d740cda606362749219f
+    version: 0.2.2.0
+    sha256: ef204534b53a8d2254ba7f9dcf6c81eb343e6b4f6b4cfc056df40edd7759afbd
     pantry-tree:
       size: 708
-      sha256: d2683bdc972269f05ad29fa95026f77293fed20921a50352c304404bf3d648f7
+      sha256: 395692d1e28f5d8a3ef3ebeb616e3d4c836d8766505bbeaebc59a83f9b5afb35
   original:
     subdir: packages/polysemy-log-co
-    url: https://github.com/tek/polysemy-log/archive/2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2.tar.gz
+    url: https://github.com/tek/polysemy-log/archive/9a8027c887001876e0cd5bed77d2d90453335b09.tar.gz
 - completed:
     size: 48370
     subdir: co-log-polysemy
@@ -83,16 +83,9 @@ packages:
   original:
     subdir: packages/conc
     url: https://github.com/tek/polysemy-conc/archive/28bd2ef2a7ceaa82d4478d98884287fb5fe17e9f.tar.gz
-- completed:
-    hackage: aeson-1.4.7.1@sha256:6d8d2fd959b7122a1df9389cf4eca30420a053d67289f92cdc0dbc0dab3530ba,7098
-    pantry-tree:
-      size: 40133
-      sha256: caa9306e519c601ab0170d113daa03c1163db53e5466be2968bbd61a771bebcb
-  original:
-    hackage: aeson-1.4.7.1@sha256:6d8d2fd959b7122a1df9389cf4eca30420a053d67289f92cdc0dbc0dab3530ba,7098
 snapshots:
 - completed:
-    size: 565720
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/17/8.yaml
-    sha256: 76bf8992ff8dfe6eda9c02f81866138c2369344d5011ab39ae403457c4448b03
-  original: lts-17.8
+    size: 534126
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/31.yaml
+    sha256: 637fb77049b25560622a224845b7acfe81a09fdb6a96a3c75997a10b651667f6
+  original: lts-16.31

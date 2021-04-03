@@ -17,7 +17,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: lts-17.8
+resolver: lts-16.31 # lts-17.8
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -38,7 +38,7 @@ extra-deps:
   - polysemy-1.5.0.0@sha256:7edb723e7f703fe273a40e43fe33f6e8f7659fe60759e8698def1481262d314d,6246
   - polysemy-plugin-0.3.0.0@sha256:22e7553d0fddb48d9484ba1c71d2ed825213fcb214866d9b502ee02bfb960cb4,3121
   - github: tek/polysemy-log
-    commit: 2d5bfd9a5e1a6b9f7aa7c6be91e9260bec3b84c2
+    commit: 9a8027c887001876e0cd5bed77d2d90453335b09
     subdirs:
       - packages/polysemy-log
       - packages/polysemy-log-co
