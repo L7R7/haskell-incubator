@@ -1,0 +1,68 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 40c163ecdf49497de61595446c2c629772b77df704dfcef2e8f50ff94d4d385e
+
+name:           hkdts
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/L7R7/hkdts#readme>
+homepage:       https://github.com/L7R7/hkdts#readme
+bug-reports:    https://github.com/L7R7/hkdts/issues
+author:         Leonhard Riedißer
+maintainer:     leo008180@googlemail.com
+copyright:      2021 Leonhard Riedißer
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/L7R7/hkdts
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_hkdts
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -Wmissing-export-lists -Wunused-packages -fno-warn-orphans -fwrite-ide-info -hiedir=.hie -O2 -flate-specialise -fspecialise-aggressively
+  build-depends:
+      base >=4.7 && <5
+    , aeson
+    , barbies
+    , lens
+    , lens-aeson
+    , validation
+  default-language: Haskell2010
+
+executable hkdts-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_hkdts
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , hkdts
+  default-language: Haskell2010
+
+test-suite hkdts-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_hkdts
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , hkdts
+  default-language: Haskell2010
