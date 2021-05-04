@@ -7,7 +7,6 @@
 {-# LANGUAGE TypeOperators #-}
 -- TODO: check this?
 {-# LANGUAGE UndecidableInstances #-}
-{-# OPTIONS_GHC -Wno-typed-holes #-}
 
 module Lib where
 
@@ -16,7 +15,6 @@ import Control.Applicative
 import Control.Lens
 import qualified Data.Aeson as A
 import Data.Aeson.Lens
-import Data.Barbie
 import Data.Foldable (fold)
 import Data.Functor.Compose (Compose (..))
 import Data.List.NonEmpty
@@ -27,14 +25,14 @@ import System.Environment (lookupEnv)
 import Text.Read (readMaybe)
 
 someFunc :: IO ()
-someFunc = pure ()
+someFunc = getOptions''' >>= print
 
 data Options_ f = Options_
   { serverHost :: f String,
     numThreads :: f Int,
     verbosity :: f Int
   }
-  deriving (Generic, FunctorB, TraversableB, ProductB, ConstraintsB, ProductBC)
+  deriving (Generic, FunctorB, TraversableB, ApplicativeB, ConstraintsB)
 
 deriving instance (AllBF Show f Options_) => Show (Options_ f)
 
@@ -43,11 +41,7 @@ deriving instance (AllBF Eq f Options_) => Eq (Options_ f)
 deriving instance (AllBF A.FromJSON f Options_) => A.FromJSON (Options_ f)
 
 readEnv :: Read a => String -> (IO `Compose` Maybe) a
-readEnv envKey = Compose $ do
-  lookupEnv envKey
-    >>= pure . \case
-      Just x -> readMaybe x
-      Nothing -> Nothing
+readEnv envKey = Compose $ lookupEnv envKey <&> (readMaybe =<<)
 
 -- envOpts :: Options_ ??
 -- envOpts =
@@ -69,7 +63,7 @@ jsonOptsDerived :: A.Value -> Options_ Maybe
 jsonOptsDerived = fromResult . A.fromJSON
   where
     fromResult (A.Success a) = a
-    fromResult (A.Error _) = buniq Nothing
+    fromResult (A.Error _) = bpure Nothing
 
 jsonOptsCustom :: A.Value -> Options_ Maybe
 jsonOptsCustom =
@@ -98,7 +92,7 @@ envOpts' =
       }
 
 readConfigFileDummy :: IO A.Value
-readConfigFileDummy = pure $ A.object ["host" A..= A.String "example.com", "verbosity" A..= A.Number 42]
+readConfigFileDummy = pure $ A.object ["host" A..= A.String "example.com"] --, "verbosity" A..= A.Number 42]
 
 getOptions :: IO (Options_ Maybe)
 getOptions = do
@@ -112,7 +106,7 @@ instance (Alternative f) => Semigroup (Options_ f) where
   (<>) = bzipWith (<|>)
 
 instance (Alternative f) => Monoid (Options_ f) where
-  mempty = buniq empty
+  mempty = bpure empty
 
 getOptions' :: IO (Options_ Maybe)
 getOptions' = envOpts' <> (jsonOptsCustom <$> readConfigFileDummy)
@@ -120,7 +114,7 @@ getOptions' = envOpts' <> (jsonOptsCustom <$> readConfigFileDummy)
 getOptions'' :: IO (Options_ Maybe)
 getOptions'' = fold [envOpts', jsonOptsCustom <$> readConfigFileDummy]
 
-withDefaults :: ProductB b => b Identity -> b Maybe -> b Identity
+withDefaults :: ApplicativeB b => b Identity -> b Maybe -> b Identity
 withDefaults = bzipWith fromMaybeI
   where
     fromMaybeI :: Identity a -> Maybe a -> Identity a
@@ -135,18 +129,27 @@ type Options = Options_ Identity
 getOptionsWithDefaults :: IO Options
 getOptionsWithDefaults = withDefaults defaultOpts <$> fold [envOpts', jsonOptsCustom <$> readConfigFileDummy]
 
-defaultOpts :: Options_ Identity
-defaultOpts = error "not implemented"
+-- | instead of choosing `Identity`, we make it abstract over the wrapped type.
+--
+-- This makes it easy to provide default values in a more real world scenario,
+-- e.g. when using `IO` to read config values from somewhere externally
+defaultOpts :: Applicative f => Options_ f
+defaultOpts =
+  Options_
+    { serverHost = pure "funf",
+      numThreads = pure 5,
+      verbosity = pure 5
+    }
 
 optErrors :: Options_ (Const String)
 optErrors =
   Options_
-    { serverHost = Const "server host required but not provided",
+    { serverHost = Const "server host required but not provided", -- `Const` is optional with OverloadedStrings
       numThreads = "num threads required but not provided",
       verbosity = "verbosity required but not provided"
     }
 
-validateOptions :: (TraversableB b, ProductB b) => b (Const String) -> b Maybe -> Validation (NonEmpty String) (b Identity)
+validateOptions :: (TraversableB b, ApplicativeB b) => b (Const String) -> b Maybe -> Validation (NonEmpty String) (b Identity)
 validateOptions errMsgs mOpts = bsequence' $ bzipWith validate mOpts errMsgs
   where
     validate :: Maybe a -> Const String a -> Validation (NonEmpty String) a
@@ -154,5 +157,4 @@ validateOptions errMsgs mOpts = bsequence' $ bzipWith validate mOpts errMsgs
     validate Nothing (Const err) = Failure $ pure err
 
 getOptions''' :: IO (Validation (NonEmpty String) Options)
-getOptions''' =
-  validateOptions optErrors <$> fold [envOpts', jsonOptsCustom <$> readConfigFileDummy]
+getOptions''' = validateOptions optErrors <$> fold [envOpts', jsonOptsCustom <$> readConfigFileDummy] --, pure defaultOpts]
