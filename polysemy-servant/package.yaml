@@ -1,14 +1,14 @@
-name:                polysemy-servant
-version:             0.1.0.0
-github:              "L7R7/polysemy-servant"
-license:             BSD3
-author:              "Leonhard Riedißer"
-maintainer:          "leo008180@googlemail.com"
-copyright:           "2022 Leonhard Riedißer"
+name: polysemy-servant
+version: 0.1.0.0
+github: "L7R7/polysemy-servant"
+license: BSD3
+author: "Leonhard Riedißer"
+maintainer: "leo008180@googlemail.com"
+copyright: "2022 Leonhard Riedißer"
 
 extra-source-files:
-- README.md
-- ChangeLog.md
+  - README.md
+  - ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -17,10 +17,10 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/L7R7/polysemy-servant#readme>
+description: Please see the README on GitHub at <https://github.com/L7R7/polysemy-servant#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
 
 ghc-options:
   - -fwrite-ide-info
@@ -39,8 +39,13 @@ ghc-options:
 library:
   source-dirs: src
   dependencies:
+    - aeson
+    - bytestring
+    - containers
     - polysemy
     - servant
+    - servant-auth
+    - servant-auth-server
     - servant-server
     - transformers
     - warp
@@ -52,22 +57,22 @@ library:
 
 executables:
   polysemy-servant-exe:
-    main:                Main.hs
-    source-dirs:         app
+    main: Main.hs
+    source-dirs: app
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - polysemy-servant
+      - polysemy-servant
 
 tests:
   polysemy-servant-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main: Spec.hs
+    source-dirs: test
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - polysemy-servant
+      - polysemy-servant

@@ -33,9 +33,14 @@ library
       src
   ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -O2 -flate-specialise -fspecialise-aggressively -Wmissing-export-lists
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
     , polysemy
     , servant
+    , servant-auth
+    , servant-auth-server
     , servant-server
     , transformers
     , warp
