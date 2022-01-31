@@ -1,0 +1,67 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           polysemy-servant
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/L7R7/polysemy-servant#readme>
+homepage:       https://github.com/L7R7/polysemy-servant#readme
+bug-reports:    https://github.com/L7R7/polysemy-servant/issues
+author:         Leonhard Riedißer
+maintainer:     leo008180@googlemail.com
+copyright:      2022 Leonhard Riedißer
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/L7R7/polysemy-servant
+
+library
+  exposed-modules:
+      Lib
+      Pib
+  other-modules:
+      Paths_polysemy_servant
+  hs-source-dirs:
+      src
+  ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -O2 -flate-specialise -fspecialise-aggressively -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , polysemy
+    , servant
+    , servant-server
+    , transformers
+    , warp
+  default-language: Haskell2010
+
+executable polysemy-servant-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_polysemy_servant
+  hs-source-dirs:
+      app
+  ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , polysemy-servant
+  default-language: Haskell2010
+
+test-suite polysemy-servant-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_polysemy_servant
+  hs-source-dirs:
+      test
+  ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , polysemy-servant
+  default-language: Haskell2010
