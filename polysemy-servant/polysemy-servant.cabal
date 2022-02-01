@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Cib
       Lib
       Pib
   other-modules:
@@ -37,11 +38,14 @@ library
     , base >=4.7 && <5
     , bytestring
     , containers
+    , http-api-data
+    , mtl
     , polysemy
     , servant
     , servant-auth
     , servant-auth-server
     , servant-server
+    , time
     , transformers
     , warp
   default-language: Haskell2010

@@ -42,11 +42,14 @@ library:
     - aeson
     - bytestring
     - containers
+    - http-api-data
+    - mtl
     - polysemy
     - servant
     - servant-auth
     - servant-auth-server
     - servant-server
+    - time
     - transformers
     - warp
   ghc-options:

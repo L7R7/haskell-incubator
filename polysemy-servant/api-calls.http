@@ -1,0 +1,22 @@
+###
+
+# curl -v -d "username=AliBaba&password=OpenSesame" -X POST localhost:8080/login
+POST localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=AliBaba&password=OpenSesame
+
+###
+
+GET localhost:8080/name
+
+Cookie: JWT-Cookie=eyJhbGciOiJIUzUxMiJ9.eyJkYXQiOnsiZW1haWwiOiJmb28iLCJuYW1lIjoiQWxpIEJhYmEifX0.ntLeQ5loojzdqkBMi7APDaWSZ2xMDdGj9N1olXKFnGRIWjhjPus8KzLiqe34kt7yUMItkvNFcexKEO_JUX5n9A;
+
+<> 2022-02-01T181231.200.json
+<> 2022-02-01T181211.200.json
+<> 2022-02-01T181152.200.json
+<> 2022-02-01T180452.200.json
+<> 2022-02-01T180445.200.json
+<> 2022-02-01T180426.200.json
+<> 2022-02-01T180422.200.json
+<> 2022-02-01T180203.200.json
