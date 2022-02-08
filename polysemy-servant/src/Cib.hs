@@ -6,7 +6,7 @@
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
 {-# OPTIONS_GHC -Wno-missing-export-lists #-}
 
-module Cib where
+module Cib (someFunc) where
 
 import Control.Monad.Trans (liftIO)
 import Data.Aeson (FromJSON, ToJSON)
@@ -19,7 +19,7 @@ import Servant.Auth.Server
 import Web.FormUrlEncoded
 
 data User = User {name :: String, email :: String}
-  deriving (Eq, Show,  Generic)
+  deriving (Eq, Show, Generic)
 
 instance ToJSON User
 
@@ -43,16 +43,17 @@ type Unprotected =
     :> ReqBody '[FormUrlEncoded] Login
     :> Verb 'POST 204 '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] NoContent)
 
+type Logout = "logout" :> Get '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
+
 type Protected = "name" :> Get '[JSON] String
 
-type AuthAPI =
-  (Servant.Auth.Server.Auth '[Cookie] User :> Protected)
-    :<|> Unprotected
+type AuthAPI = (Servant.Auth.Server.Auth '[Cookie] User :> Protected) :<|> Unprotected :<|> Logout
 
-type API auths = (Servant.Auth.Server.Auth auths User :> Protected) :<|> Unprotected
+server :: CookieSettings -> JWTSettings -> Server AuthAPI
+server cs jwts = protected :<|> checkCreds cs jwts :<|> logout cs
 
-server :: CookieSettings -> JWTSettings -> Server (API auths)
-server cs jwts = protected :<|> checkCreds cs jwts
+logout :: CookieSettings -> Handler (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
+logout cookieSettings = pure $ clearSession cookieSettings "logged out"
 
 cookieConfig :: CookieSettings
 cookieConfig =
@@ -84,11 +85,7 @@ checkCreds cookieSettings jwtSettings Login {username = "AliBaba", password = "O
   case mApplyCookies of
     Nothing -> trace "Nothing" $ throwError err401
     Just applyCookies -> return $ applyCookies NoContent
-checkCreds _ _ Login {username = user, password = _} =
-  trace
-    ("Received " ++ user)
-    throwError
-    err401
+checkCreds _ _ Login {username = user, password = _} = trace ("Received " ++ user) (throwError err401)
 
 someFunc :: IO ()
 someFunc = do
