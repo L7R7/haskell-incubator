@@ -79,3 +79,11 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - polysemy-servant
+      - servant
+      - servant-auth
+      - servant-auth-server
+      - servant-client
+      - servant-server
+      - sydtest
+      - sydtest-discover
+      - sydtest-servant

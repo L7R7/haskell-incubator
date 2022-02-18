@@ -6,7 +6,7 @@
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
 {-# OPTIONS_GHC -Wno-missing-export-lists #-}
 
-module Cib (someFunc) where
+module Cib (someFunc, AuthAPI) where
 
 import Control.Monad.Trans (liftIO)
 import Data.Aeson (FromJSON, ToJSON)
