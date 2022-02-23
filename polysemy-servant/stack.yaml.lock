@@ -3,10 +3,66 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: autodocodec-0.0.1.0@sha256:fab19b4019ab3b43ce656435c33bc5cd83ec997b28ed39a3e80982a2e056a616,1547
+    pantry-tree:
+      size: 688
+      sha256: eda5beece10b7f90f40bc9f8b43e50fbb9e4cacd2b4aa51b85c2c530a32b0bab
+  original:
+    hackage: autodocodec-0.0.1.0@sha256:fab19b4019ab3b43ce656435c33bc5cd83ec997b28ed39a3e80982a2e056a616,1547
+- completed:
+    hackage: autodocodec-schema-0.1.0.0@sha256:e62052ca88d6bae51af058ad120b5c5d0510145f603dbb70616865a8de1ce238,1089
+    pantry-tree:
+      size: 235
+      sha256: 08c03850f28b7566304455c8f7445cdbaa2268ac609c1beb85241f41ce058dd8
+  original:
+    hackage: autodocodec-schema-0.1.0.0@sha256:e62052ca88d6bae51af058ad120b5c5d0510145f603dbb70616865a8de1ce238,1089
+- completed:
+    hackage: autodocodec-yaml-0.1.0.0@sha256:c9c87b0dcc5f192bec7b722013d6652895b6b1d6a9d4b342958f20be66a31d47,1191
+    pantry-tree:
+      size: 439
+      sha256: 7ab0cf51b3455b3727cdee07dee26547cd06df3eba5455c0fbee93ea5161bb78
+  original:
+    hackage: autodocodec-yaml-0.1.0.0@sha256:c9c87b0dcc5f192bec7b722013d6652895b6b1d6a9d4b342958f20be66a31d47,1191
+- completed:
+    hackage: servant-flatten-0.2@sha256:276896f7c5cdec5b8f8493f6205fded0cc602d050b58fdb09a6d7c85c3bb0837,1234
+    pantry-tree:
+      size: 325
+      sha256: 04f12c7bef2c3f9a25d94eb9489752ed498db8e243069fe95838dbb51df1dcb3
+  original:
+    hackage: servant-flatten-0.2@sha256:276896f7c5cdec5b8f8493f6205fded0cc602d050b58fdb09a6d7c85c3bb0837,1234
+- completed:
+    hackage: servant-lucid-0.9.0.5@sha256:c46780eefc12544b862af1dd7c7f88715e5fb45d954da538b0641d42c7b5f5c6,1787
+    pantry-tree:
+      size: 392
+      sha256: 7d529522482f4f83a62430a0fe245afc6272a5b9a63f2581388ac602654806c0
+  original:
+    hackage: servant-lucid-0.9.0.5@sha256:c46780eefc12544b862af1dd7c7f88715e5fb45d954da538b0641d42c7b5f5c6,1787
+- completed:
+    hackage: sydtest-0.8.0.0@sha256:71ce53ce5bbcc2511b584969e7711a38c734d3ab0de82d070bc85c07d5fa81da,3704
+    pantry-tree:
+      size: 3079
+      sha256: 8bf25aa261226c4dbfce5cdc531df56d43a7b397dcd733ab9ea24b5da40aaba7
+  original:
+    hackage: sydtest-0.8.0.0@sha256:71ce53ce5bbcc2511b584969e7711a38c734d3ab0de82d070bc85c07d5fa81da,3704
+- completed:
+    hackage: sydtest-wai-0.2.0.0@sha256:f73bb6e2375f0e588cc7e245052fa8d99dd9f9be57f424efc133185cf64474a9,1620
+    pantry-tree:
+      size: 623
+      sha256: 3d9ec6df76d0d8166c5a2e2d8d3402da4659267bca37b1f6b3fb2ea5a2535013
+  original:
+    hackage: sydtest-wai-0.2.0.0@sha256:f73bb6e2375f0e588cc7e245052fa8d99dd9f9be57f424efc133185cf64474a9,1620
+- completed:
+    hackage: http-client-0.7.11@sha256:3f59ac8ffe2a3768846cdda040a0d1df2a413960529ba61c839861c948871967,5756
+    pantry-tree:
+      size: 2547
+      sha256: 8372e84e9c710097f4f80f2016ca15a5a0cd7884b8ac5ce70f26b3110f4401bd
+  original:
+    hackage: http-client-0.7.11@sha256:3f59ac8ffe2a3768846cdda040a0d1df2a413960529ba61c839861c948871967,5756
 snapshots:
 - completed:
-    size: 587393
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/25.yaml
-    sha256: 1b74fb5e970497b5aefae56703f1bd44aa648bd1a5ef95c1eb8c29775087e2bf
-  original: lts-18.25
+    size: 590102
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/26.yaml
+    sha256: e76d109964d9335abb412e22139c5bce3078be290ac6d90b8ecea6cc009bb198
+  original: lts-18.26

@@ -7,8 +7,12 @@
 {-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
 
+-- | servant + polysemy
 module Pib
-  ( someFunc,
+  ( API,
+    api,
+    someFunc,
+    application,
   )
 where
 
@@ -17,7 +21,7 @@ import Data.Aeson (FromJSON, ToJSON)
 import Data.Function ((&))
 import Data.Time
 import Debug.Trace (trace)
-import Network.Wai.Handler.Warp
+import qualified Network.Wai.Handler.Warp as Wai
 import Polysemy
 import Polysemy.Error (Error, runError, throw)
 import Servant
@@ -43,10 +47,6 @@ instance FromJSON User
 
 instance FromJWT User
 
-instance ToJSON Login
-
-instance FromJSON Login
-
 instance FromForm Login
 
 type Unprotected =
@@ -54,7 +54,7 @@ type Unprotected =
     :> ReqBody '[FormUrlEncoded] Login
     :> Verb 'POST 204 '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
 
-type Logout = "logout" :> Get '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
+type Logout = "logout" :> Post '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
 
 type Protected = "name" :> Get '[JSON] String
 
@@ -102,6 +102,12 @@ nameEndpoint x = trace ("Access Denied " ++ show x) $ throw err401
 startServer :: IO ()
 startServer = do
   let port = 8080
+  putStrLn $ "Serving endpoint " ++ show port
+  app <- application
+  Wai.run port app
+
+application :: IO Application
+application = do
   let cookieConfig =
         defaultCookieSettings
           { cookieIsSecure = NotSecure,
@@ -111,5 +117,4 @@ startServer = do
             cookieXsrfSetting = Just def {xsrfExcludeGet = True}
           }
   jwtSettings <- defaultJWTSettings <$> generateKey
-  putStrLn $ "Serving endpoint " ++ show port
-  serveWithContext api (context cookieConfig jwtSettings) (hoist cookieConfig jwtSettings) & runSettings (setPort port defaultSettings)
+  pure $ serveWithContext api (context cookieConfig jwtSettings) (hoist cookieConfig jwtSettings)

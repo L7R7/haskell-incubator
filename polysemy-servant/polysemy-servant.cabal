@@ -26,6 +26,8 @@ source-repository head
 library
   exposed-modules:
       Cib
+      Hib.Docs
+      Hib.Hib
       Lib
       Pib
   other-modules:
@@ -38,13 +40,21 @@ library
     , base >=4.7 && <5
     , bytestring
     , containers
+    , cookie
     , http-api-data
+    , http-types
+    , lucid
     , mtl
     , polysemy
     , servant
     , servant-auth
+    , servant-auth-docs
     , servant-auth-server
+    , servant-docs
+    , servant-flatten
+    , servant-lucid
     , servant-server
+    , text
     , time
     , transformers
     , warp
@@ -67,12 +77,18 @@ test-suite polysemy-servant-test
   main-is: Spec.hs
   other-modules:
       ApiSpec
+      ApiSpecDefinition
+      CibSpec
+      HibSpec
+      PibSpec
       Paths_polysemy_servant
   hs-source-dirs:
       test
   ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , http-client ==0.7.11
+    , http-types
     , polysemy-servant
     , servant
     , servant-auth
@@ -82,4 +98,5 @@ test-suite polysemy-servant-test
     , sydtest
     , sydtest-discover
     , sydtest-servant
+    , sydtest-wai ==0.2.0.0
   default-language: Haskell2010

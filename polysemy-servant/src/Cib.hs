@@ -6,7 +6,7 @@
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
 {-# OPTIONS_GHC -Wno-missing-export-lists #-}
 
-module Cib (someFunc, AuthAPI) where
+module Cib (someFunc, AuthAPI, application) where
 
 import Control.Monad.Trans (liftIO)
 import Data.Aeson (FromJSON, ToJSON)
@@ -43,7 +43,7 @@ type Unprotected =
     :> ReqBody '[FormUrlEncoded] Login
     :> Verb 'POST 204 '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] NoContent)
 
-type Logout = "logout" :> Get '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
+type Logout = "logout" :> Post '[JSON] (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
 
 type Protected = "name" :> Get '[JSON] String
 
@@ -87,9 +87,14 @@ checkCreds cookieSettings jwtSettings Login {username = "AliBaba", password = "O
     Just applyCookies -> return $ applyCookies NoContent
 checkCreds _ _ Login {username = user, password = _} = trace ("Received " ++ user) (throwError err401)
 
+application :: IO Application
+application = do
+  jwtConfig <- getJwtConfig
+  pure $ serveWithContext (Proxy :: Proxy AuthAPI) (context cookieConfig jwtConfig) (server cookieConfig jwtConfig)
+
 someFunc :: IO ()
 someFunc = do
   let port = 8080
-  jwtConfig <- getJwtConfig
   putStrLn $ "Serving endpoint " ++ show port
-  run port $ serveWithContext (Proxy :: Proxy AuthAPI) (context cookieConfig jwtConfig) (server cookieConfig jwtConfig)
+  app <- application
+  run port app

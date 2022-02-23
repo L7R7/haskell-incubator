@@ -1,6 +1,6 @@
 module Main where
 
-import Cib
+import Hib.Hib
 
 main :: IO ()
 main = someFunc

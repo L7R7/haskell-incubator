@@ -14,4 +14,4 @@ import Test.Syd.Servant
 spec :: Spec
 spec = pending "foo"
 
-_ = client (Proxy :: Proxy Cib.AuthAPI)
+-- _ = client (Proxy :: Proxy Cib.AuthAPI)
