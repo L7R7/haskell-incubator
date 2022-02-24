@@ -23,6 +23,7 @@ where
 
 import Control.Monad.Trans.Except
 import Data.Aeson (FromJSON, ToJSON)
+import Data.Foldable (traverse_)
 import Data.Function ((&))
 import Data.Text as T
 import Data.Time
@@ -134,15 +135,13 @@ loginPage maybeRef = pure $
           input_ [type_ "submit", name_ "submit"]
   where
     refInfo =
-      p_ $
-        maybe
-          mempty
-          ( \case
-              LoggedOut -> "You've been logged out"
-              Denied -> "login to get access to this resouce"
-              BadCreds -> "the provided credentials are wrong or unknown"
-          )
-          maybeRef
+      traverse_
+        ( p_ . \case
+            LoggedOut -> "You've been logged out"
+            Denied -> "login to get access to this resouce"
+            BadCreds -> "the provided credentials are wrong or unknown"
+        )
+        maybeRef
 
 checkCreds ::
   (Member (Embed IO) r, Member (Error ServerError) r) =>

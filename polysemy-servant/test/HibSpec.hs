@@ -28,7 +28,7 @@ spec = waiClientSpecWith application $ do
       it "post with correct Content-Type and invalid creds returns 401" $ do
         resp <- request methodPost "/login" [("Content-Type", "application/x-www-form-urlencoded")] "username=foo&password=wrong"
         liftIO $ do
-          responseStatus resp `shouldBe` found302 
+          responseStatus resp `shouldBe` found302
           context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "login?ref=badcreds"
 
     it "post with correct Content-Type and valid creds sets cookies and returns 302 with URL to /name" $ do
