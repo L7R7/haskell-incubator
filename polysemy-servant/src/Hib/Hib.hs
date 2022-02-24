@@ -89,7 +89,13 @@ type LogoutAPI = "logout" :> Verb 'POST 302 '[JSON] (Headers '[Header "Location"
 
 type Protected = Auth '[Cookie] User :> "name" :> Get '[HTML] (Html ())
 
-type API = Protected :<|> LoginAPI :<|> LogoutAPI
+type RootRedirect = Verb 'GET 302 '[HTML] (Headers '[Header "Location" URI] String)
+
+type API =
+  RootRedirect
+    :<|> Protected
+    :<|> LoginAPI
+    :<|> LogoutAPI
 
 api :: Proxy API
 api = Proxy
@@ -98,7 +104,7 @@ loginFormLink :: Link
 nameLink :: Link
 loginLink :: Maybe LoginRef -> Link
 logoutLink :: Link
-nameLink :<|> (loginFormLink :<|> loginLink :<|> logoutLink) = allLinks (Proxy :: Proxy (Flat API))
+_ :<|> nameLink :<|> (loginFormLink :<|> loginLink :<|> logoutLink) = allLinks (Proxy :: Proxy (Flat API))
 
 context :: CookieSettings -> JWTSettings -> Context '[CookieSettings, JWTSettings]
 context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. EmptyContext
@@ -114,7 +120,10 @@ liftServer sem =
     & Handler . ExceptT
 
 server :: (Member (Embed IO) r, Member (Error ServerError) r) => CookieSettings -> JWTSettings -> ServerT API (Sem r)
-server cs js = nameEndpoint :<|> (checkCreds cs js :<|> loginPage) :<|> logout cs
+server cs js = redirectRoot :<|> nameEndpoint :<|> (checkCreds cs js :<|> loginPage) :<|> logout cs
+
+redirectRoot :: Sem r (Headers '[Header "Location" URI] String)
+redirectRoot = pure $ addHeader (linkURI nameLink) "root-redirect"
 
 loginPage :: Maybe LoginRef -> Sem r (Html ())
 loginPage maybeRef = pure $

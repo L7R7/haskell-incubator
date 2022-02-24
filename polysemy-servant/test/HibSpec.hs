@@ -74,3 +74,9 @@ spec = waiClientSpecWith application $ do
         context "resource can't be accessed" $ do
           responseStatus resp'' `shouldBe` found302
           snd <$> find (\h -> fst h == hLocation) (responseHeaders resp'') `shouldBe` Just "login?ref=denied"
+
+    it "redirects to /name when accessing /" $ do
+      resp <- get "/"
+      liftIO $ do
+        responseStatus resp `shouldBe` found302
+        snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "name"
