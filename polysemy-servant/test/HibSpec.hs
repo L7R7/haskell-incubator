@@ -80,3 +80,9 @@ spec = waiClientSpecWith application $ do
     liftIO $ do
       responseStatus resp `shouldBe` found302
       snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "name"
+
+  it "serves static files" $ do
+    resp <- get "static/styles.css"
+    liftIO $ do
+      responseStatus resp `shouldBe` ok200
+      responseBody resp `shouldBe` "/* test works */\n"

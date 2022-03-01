@@ -96,6 +96,7 @@ type API =
     :<|> Protected
     :<|> LoginAPI
     :<|> LogoutAPI
+    :<|> "static" :> Raw
 
 api :: Proxy API
 api = Proxy
@@ -104,7 +105,7 @@ loginFormLink :: Link
 nameLink :: Link
 loginLink :: Maybe LoginRef -> Link
 logoutLink :: Link
-_ :<|> nameLink :<|> (loginFormLink :<|> loginLink :<|> logoutLink) = allLinks (Proxy :: Proxy (Flat API))
+_ :<|> nameLink :<|> (loginFormLink :<|> loginLink :<|> logoutLink :<|> _) = allLinks (Proxy :: Proxy (Flat API))
 
 context :: CookieSettings -> JWTSettings -> Context '[CookieSettings, JWTSettings]
 context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. EmptyContext
@@ -120,7 +121,7 @@ liftServer sem =
     & Handler . ExceptT
 
 server :: (Member (Embed IO) r, Member (Error ServerError) r) => CookieSettings -> JWTSettings -> ServerT API (Sem r)
-server cs js = redirectRoot :<|> nameEndpoint :<|> (checkCreds cs js :<|> loginPage) :<|> logout cs
+server cs js = redirectRoot :<|> nameEndpoint :<|> (checkCreds cs js :<|> loginPage) :<|> logout cs :<|> serveDirectoryWebApp "static"
 
 redirectRoot :: Sem r (Headers '[Header "Location" URI] String)
 redirectRoot = pure $ addHeader (linkURI nameLink) "root-redirect"
