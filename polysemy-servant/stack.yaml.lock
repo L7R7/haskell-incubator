@@ -5,27 +5,6 @@
 
 packages:
 - completed:
-    hackage: autodocodec-0.0.1.0@sha256:fab19b4019ab3b43ce656435c33bc5cd83ec997b28ed39a3e80982a2e056a616,1547
-    pantry-tree:
-      size: 688
-      sha256: eda5beece10b7f90f40bc9f8b43e50fbb9e4cacd2b4aa51b85c2c530a32b0bab
-  original:
-    hackage: autodocodec-0.0.1.0@sha256:fab19b4019ab3b43ce656435c33bc5cd83ec997b28ed39a3e80982a2e056a616,1547
-- completed:
-    hackage: autodocodec-schema-0.1.0.0@sha256:e62052ca88d6bae51af058ad120b5c5d0510145f603dbb70616865a8de1ce238,1089
-    pantry-tree:
-      size: 235
-      sha256: 08c03850f28b7566304455c8f7445cdbaa2268ac609c1beb85241f41ce058dd8
-  original:
-    hackage: autodocodec-schema-0.1.0.0@sha256:e62052ca88d6bae51af058ad120b5c5d0510145f603dbb70616865a8de1ce238,1089
-- completed:
-    hackage: autodocodec-yaml-0.1.0.0@sha256:c9c87b0dcc5f192bec7b722013d6652895b6b1d6a9d4b342958f20be66a31d47,1191
-    pantry-tree:
-      size: 439
-      sha256: 7ab0cf51b3455b3727cdee07dee26547cd06df3eba5455c0fbee93ea5161bb78
-  original:
-    hackage: autodocodec-yaml-0.1.0.0@sha256:c9c87b0dcc5f192bec7b722013d6652895b6b1d6a9d4b342958f20be66a31d47,1191
-- completed:
     hackage: servant-flatten-0.2@sha256:276896f7c5cdec5b8f8493f6205fded0cc602d050b58fdb09a6d7c85c3bb0837,1234
     pantry-tree:
       size: 325
@@ -40,29 +19,93 @@ packages:
   original:
     hackage: servant-lucid-0.9.0.5@sha256:c46780eefc12544b862af1dd7c7f88715e5fb45d954da538b0641d42c7b5f5c6,1787
 - completed:
-    hackage: sydtest-0.8.0.0@sha256:71ce53ce5bbcc2511b584969e7711a38c734d3ab0de82d070bc85c07d5fa81da,3704
-    pantry-tree:
-      size: 3079
-      sha256: 8bf25aa261226c4dbfce5cdc531df56d43a7b397dcd733ab9ea24b5da40aaba7
-  original:
-    hackage: sydtest-0.8.0.0@sha256:71ce53ce5bbcc2511b584969e7711a38c734d3ab0de82d070bc85c07d5fa81da,3704
-- completed:
-    hackage: sydtest-wai-0.2.0.0@sha256:f73bb6e2375f0e588cc7e245052fa8d99dd9f9be57f424efc133185cf64474a9,1620
-    pantry-tree:
-      size: 623
-      sha256: 3d9ec6df76d0d8166c5a2e2d8d3402da4659267bca37b1f6b3fb2ea5a2535013
-  original:
-    hackage: sydtest-wai-0.2.0.0@sha256:f73bb6e2375f0e588cc7e245052fa8d99dd9f9be57f424efc133185cf64474a9,1620
-- completed:
     hackage: http-client-0.7.11@sha256:3f59ac8ffe2a3768846cdda040a0d1df2a413960529ba61c839861c948871967,5756
     pantry-tree:
       size: 2547
       sha256: 8372e84e9c710097f4f80f2016ca15a5a0cd7884b8ac5ce70f26b3110f4401bd
   original:
     hackage: http-client-0.7.11@sha256:3f59ac8ffe2a3768846cdda040a0d1df2a413960529ba61c839861c948871967,5756
+- completed:
+    size: 286716
+    subdir: sydtest
+    url: https://github.com/srid/sydtest/archive/9c6c7678f7aabe22e075aab810a6a2e304591d24.tar.gz
+    name: sydtest
+    version: 0.8.0.0
+    sha256: ba1e819a788de8363904cad6bf2a3d36e84253e72347400ecb8cb3ad214bbb16
+    pantry-tree:
+      size: 3181
+      sha256: 19d20499d6e4669243f850b2e338b3dc9d5ff9fb219d0f20fe236d9f50521c19
+  original:
+    subdir: sydtest
+    url: https://github.com/srid/sydtest/archive/9c6c7678f7aabe22e075aab810a6a2e304591d24.tar.gz
+- completed:
+    size: 286716
+    subdir: sydtest-wai
+    url: https://github.com/srid/sydtest/archive/9c6c7678f7aabe22e075aab810a6a2e304591d24.tar.gz
+    name: sydtest-wai
+    version: 0.2.0.0
+    sha256: ba1e819a788de8363904cad6bf2a3d36e84253e72347400ecb8cb3ad214bbb16
+    pantry-tree:
+      size: 776
+      sha256: 81e689a4e0f83186ea500d54fbda628bd792acecef6a6756fd9c2e2039348762
+  original:
+    subdir: sydtest-wai
+    url: https://github.com/srid/sydtest/archive/9c6c7678f7aabe22e075aab810a6a2e304591d24.tar.gz
+- completed:
+    size: 60321
+    subdir: autodocodec
+    url: https://github.com/srid/autodocodec/archive/42b42a7407f33c6c74fa4e8c84906aebfed28daf.tar.gz
+    name: autodocodec
+    version: 0.0.1.0
+    sha256: 444d5013fdf1c5577a49279d3feed84ef69eb3b1f172a871bbbcd91643faa8db
+    pantry-tree:
+      size: 860
+      sha256: da864fda26aa9b55ed58d3c1d4477a3cb69cae298ced8563b28120cbfcb7b56f
+  original:
+    subdir: autodocodec
+    url: https://github.com/srid/autodocodec/archive/42b42a7407f33c6c74fa4e8c84906aebfed28daf.tar.gz
+- completed:
+    size: 60321
+    subdir: autodocodec-schema
+    url: https://github.com/srid/autodocodec/archive/42b42a7407f33c6c74fa4e8c84906aebfed28daf.tar.gz
+    name: autodocodec-schema
+    version: 0.1.0.0
+    sha256: 444d5013fdf1c5577a49279d3feed84ef69eb3b1f172a871bbbcd91643faa8db
+    pantry-tree:
+      size: 336
+      sha256: 5485bc2eae98b409e5cf8d29e866899f6e0e2e622178f65a9ba2eedf9c53b0f2
+  original:
+    subdir: autodocodec-schema
+    url: https://github.com/srid/autodocodec/archive/42b42a7407f33c6c74fa4e8c84906aebfed28daf.tar.gz
+- completed:
+    size: 60321
+    subdir: autodocodec-yaml
+    url: https://github.com/srid/autodocodec/archive/42b42a7407f33c6c74fa4e8c84906aebfed28daf.tar.gz
+    name: autodocodec-yaml
+    version: 0.1.0.1
+    sha256: 444d5013fdf1c5577a49279d3feed84ef69eb3b1f172a871bbbcd91643faa8db
+    pantry-tree:
+      size: 540
+      sha256: e787b02fea4cbd6408f197dd5fac4dcf0fab3c8dbc47b2d8e08d795145b0c786
+  original:
+    subdir: autodocodec-yaml
+    url: https://github.com/srid/autodocodec/archive/42b42a7407f33c6c74fa4e8c84906aebfed28daf.tar.gz
+- completed:
+    size: 114144
+    subdir: validity-aeson
+    url: https://github.com/srid/validity/archive/f7982549b95d0ab727950dc876ca06b1862135ba.tar.gz
+    name: validity-aeson
+    version: 0.2.0.4
+    sha256: aa163bfae59256fbd6713509202fe0f9aff2740b074fdce761d29e4a5ccf84f9
+    pantry-tree:
+      size: 405
+      sha256: d46d82b8b0bd6500242292fd25898fde24bdf7058d5874e306abda76f1368fff
+  original:
+    subdir: validity-aeson
+    url: https://github.com/srid/validity/archive/f7982549b95d0ab727950dc876ca06b1862135ba.tar.gz
 snapshots:
 - completed:
-    size: 590102
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/26.yaml
-    sha256: e76d109964d9335abb412e22139c5bce3078be290ac6d90b8ecea6cc009bb198
-  original: lts-18.26
+    size: 612139
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/3/2.yaml
+    sha256: 6ef685536958c4c008dd8a9cca32b182515f39051cb903d861b2aec01c508ae8
+  original: nightly-2022-03-02

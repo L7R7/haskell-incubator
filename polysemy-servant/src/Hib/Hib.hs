@@ -5,6 +5,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE PartialTypeSignatures #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
@@ -12,10 +13,7 @@
 
 -- | servant + polysemy + html using lucid
 module Hib.Hib
-  ( API,
-    Login (..),
-    LoginRef (..),
-    api,
+  ( logoutLink,
     someFunc,
     application,
   )
@@ -27,7 +25,7 @@ import Data.Foldable (traverse_)
 import Data.Function ((&))
 import Data.Text as T
 import Data.Time
-import Debug.Trace (trace)
+import Debug.Trace
 import Lucid.Base
 import Lucid.Html5
 import Network.HTTP.Types (hLocation)
@@ -35,11 +33,11 @@ import qualified Network.Wai.Handler.Warp as Wai
 import Polysemy
 import Polysemy.Error (Error, runError, throw)
 import Servant
-import Servant.API.Flatten
-import Servant.API.Generic (Generic)
+import Servant.API.Generic
 import Servant.Auth
 import Servant.Auth.Server
 import Servant.HTML.Lucid
+import Servant.Server.Generic (AsServerT)
 import Web.FormUrlEncoded
 
 someFunc :: IO ()
@@ -79,39 +77,41 @@ instance ToHttpApiData LoginRef where
 instance ToHttpApiData URI where
   toUrlPiece = T.pack . show
 
-type LoginAPI =
-  "login"
-    :> ( ReqBody '[FormUrlEncoded] Login :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
-           :<|> QueryParam "ref" LoginRef :> Get '[HTML] (Html ())
-       )
+type API = NamedRoutes NamedAPI
 
-type LogoutAPI = "logout" :> Verb 'POST 302 '[JSON] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
+data NamedAPI mode = NamedAPI
+  { rootRedirect :: mode :- Verb 'GET 302 '[HTML] (Headers '[Header "Location" URI] String),
+    protectedApi :: mode :- Auth '[Cookie] User :> "name" :> Get '[HTML] (Html ()),
+    loginEndpoints :: mode :- "login" :> NamedRoutes LoginAPI,
+    logoutEndpoints :: mode :- "logout" :> NamedRoutes LogoutAPI,
+    raw :: mode :- "static" :> Raw
+  }
+  deriving (Generic)
 
-type Protected = Auth '[Cookie] User :> "name" :> Get '[HTML] (Html ())
+data LoginAPI mode = LoginAPI
+  { loginForm ::
+      mode :- ReqBody '[FormUrlEncoded] Login
+        :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
+    loginUi :: mode :- QueryParam "ref" LoginRef :> Get '[HTML] (Html ())
+  }
+  deriving (Generic)
 
-type RootRedirect = Verb 'GET 302 '[HTML] (Headers '[Header "Location" URI] String)
-
-type API =
-  RootRedirect
-    :<|> Protected
-    :<|> LoginAPI
-    :<|> LogoutAPI
-    :<|> "static" :> Raw
-
-api :: Proxy API
-api = Proxy
+data LogoutAPI mode = LogoutAPI
+  { logoutEndpoint :: mode :- Verb 'POST 302 '[JSON] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
+  }
+  deriving (Generic)
 
 loginFormLink :: Link
 nameLink :: Link
 loginLink :: Maybe LoginRef -> Link
 logoutLink :: Link
-_ :<|> nameLink :<|> (loginFormLink :<|> loginLink :<|> logoutLink :<|> _) = allLinks (Proxy :: Proxy (Flat API))
+(NamedAPI _ nameLink (LoginAPI loginFormLink loginLink) (LogoutAPI logoutLink) _) = allFieldLinks @NamedAPI
 
 context :: CookieSettings -> JWTSettings -> Context '[CookieSettings, JWTSettings]
 context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. EmptyContext
 
 hoist :: CookieSettings -> JWTSettings -> ServerT API Handler
-hoist cookieSettings jwtSettings = hoistServerWithContext api (Proxy :: Proxy '[CookieSettings, JWTSettings]) liftServer (server cookieSettings jwtSettings)
+hoist cookieSettings jwtSettings = hoistServerWithContext (Proxy @API) (Proxy @'[CookieSettings, JWTSettings]) liftServer (server cookieSettings jwtSettings)
 
 liftServer :: Sem '[Error ServerError, Embed IO] a -> Handler a
 liftServer sem =
@@ -120,8 +120,22 @@ liftServer sem =
     & runM
     & Handler . ExceptT
 
-server :: (Member (Embed IO) r, Member (Error ServerError) r) => CookieSettings -> JWTSettings -> ServerT API (Sem r)
-server cs js = redirectRoot :<|> nameEndpoint :<|> (checkCreds cs js :<|> loginPage) :<|> logout cs :<|> serveDirectoryWebApp "static"
+server :: CookieSettings -> JWTSettings -> NamedAPI (AsServerT (Sem '[Error ServerError, Embed IO]))
+server cs js =
+  NamedAPI
+    { rootRedirect = redirectRoot,
+      protectedApi = nameEndpoint,
+      loginEndpoints =
+        LoginAPI
+          { loginForm = checkCreds cs js,
+            loginUi = loginPage
+          },
+      logoutEndpoints =
+        LogoutAPI
+          { logoutEndpoint = logout cs
+          },
+      raw = serveDirectoryWebApp "static"
+    }
 
 redirectRoot :: Sem r (Headers '[Header "Location" URI] String)
 redirectRoot = pure $ addHeader (linkURI nameLink) "root-redirect"
@@ -192,10 +206,10 @@ application = do
   let cookieConfig =
         defaultCookieSettings
           { cookieIsSecure = NotSecure,
-            cookieMaxAge = Just (secondsToDiffTime 60),
+            cookieMaxAge = Just (secondsToDiffTime 6000),
             cookieSameSite = SameSiteStrict,
             sessionCookieName = "sbLogin",
             cookieXsrfSetting = Just def {xsrfExcludeGet = True}
           }
   jwtSettings <- defaultJWTSettings <$> generateKey
-  pure $ serveWithContext api (context cookieConfig jwtSettings) (hoist cookieConfig jwtSettings)
+  pure $ serveWithContext (Proxy @API) (context cookieConfig jwtSettings) (hoist cookieConfig jwtSettings)

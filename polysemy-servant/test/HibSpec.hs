@@ -2,8 +2,10 @@
 
 module HibSpec where
 
+import Data.ByteString.Char8 (pack)
 import Data.Foldable (find)
-import Hib.Hib (application)
+import Hib.Hib (application, logoutLink)
+import Servant
 import Test.Syd
 import Test.Syd.Wai
 
@@ -47,8 +49,9 @@ spec = waiClientSpecWith application $ do
         context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "login?ref=denied"
 
   describe "logout" $ do
+    let logoutUriString = pack $ show $ linkURI logoutLink
     it "post to logout returns 204 and sets cookies" $ do
-      resp <- post "/logout" ""
+      resp <- post logoutUriString ""
       let cookies = destroyCookieJar $ responseCookieJar resp
       liftIO $ do
         context "number of cookies" $ length cookies `shouldBe` 2
@@ -63,7 +66,7 @@ spec = waiClientSpecWith application $ do
         context "authentication works" $ do
           responseStatus resp `shouldBe` found302
           snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "name"
-      resp' <- post "/logout" ""
+      resp' <- post logoutUriString ""
       liftIO $
         context "logout works" $ do
           responseStatus resp' `shouldBe` found302

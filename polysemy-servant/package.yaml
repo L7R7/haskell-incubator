@@ -42,7 +42,6 @@ library:
     - aeson
     - bytestring
     - containers
-    - cookie
     - http-api-data
     - http-types
     - lucid
@@ -50,10 +49,7 @@ library:
     - polysemy
     - servant
     - servant-auth
-    - servant-auth-docs
     - servant-auth-server
-    - servant-docs
-    - servant-flatten
     - servant-lucid
     - servant-server
     - text
@@ -87,14 +83,10 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - polysemy-servant
-      - http-client == 0.7.11
+      - bytestring
+      - http-client >= 0.7.11
       - http-types
-      - servant
-      - servant-auth
-      - servant-auth-server
-      - servant-client
       - servant-server
       - sydtest
       - sydtest-discover
-      - sydtest-servant
       - sydtest-wai == 0.2.0.0
