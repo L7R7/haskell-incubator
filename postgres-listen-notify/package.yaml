@@ -68,6 +68,8 @@ tests:
     dependencies:
       - async
       - bytestring
+      - hasql
+      - hasql-notifications
       - postgresql-simple
       - resource-pool
       - sydtest

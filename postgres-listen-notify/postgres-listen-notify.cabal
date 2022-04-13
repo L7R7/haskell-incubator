@@ -51,7 +51,9 @@ test-suite postgres-listen-notify-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      NotifyListenSpec
+      HasqlSpec
+      PostgresqlSimpleSpec
+      TestUtils
       Paths_postgres_listen_notify
   hs-source-dirs:
       test
@@ -62,6 +64,8 @@ test-suite postgres-listen-notify-test
       async
     , base >=4.7 && <5
     , bytestring
+    , hasql
+    , hasql-notifications
     , postgresql-simple
     , resource-pool
     , sydtest

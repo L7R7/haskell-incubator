@@ -1,15 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module NotifyListenSpec where
+module PostgresqlSimpleSpec where
 
 import Control.Concurrent
 import Control.Concurrent.Async
-import Data.ByteString hiding (putStrLn)
 import Data.Pool
 import Database.PostgreSQL.Simple hiding (fold)
 import Database.PostgreSQL.Simple.Notification
-import Database.Postgres.Temp
 import Test.Syd
+import TestUtils
 
 spec :: Spec
 spec = postgresSpec $ do
@@ -21,6 +20,14 @@ spec = postgresSpec $ do
         (Notification _ channel payload) <- wait asyncNotification
         channel `shouldBe` "virtual"
         payload `shouldBe` "palayloada"
+    it "doesn't need a sleep" $ \pool -> withTimeout $ do
+      var <- newEmptyMVar
+      _ <- withResource pool $ \conn -> execute_ conn "LISTEN virtual" >> async (getNotification conn >>= putMVar var)
+      _ <- withResource pool $ \conn -> execute_ conn "NOTIFY virtual, 'palayloada';"
+      (Notification _ channel payload) <- takeMVar var
+      channel `shouldBe` "virtual"
+      payload `shouldBe` "palayloada"
+
   describe "same connection" $ do
     it "listen, notify, getNotification" $ \pool -> withTimeout $ do
       withResource pool $ \conn -> do
@@ -37,29 +44,21 @@ spec = postgresSpec $ do
           (Notification _ channel payload) <- wait asyncNotification
           channel `shouldBe` "virtual"
           payload `shouldBe` "palayloada"
-
-withTimeout :: IO b -> IO ()
-withTimeout action = do
-  result <- race (threadDelay (3 * 1000000)) action
-  case result of
-    Left _ -> expectationFailure "timed out"
-    Right _ -> pure ()
-
-postgresSpec :: TestDefM outers (Pool Connection) result -> TestDefM outers oldInner result
-postgresSpec = setupAroundWith $ const setupFuncConnectionPool
-
-setupFuncConnectionPool :: SetupFunc (Pool Connection)
-setupFuncConnectionPool = SetupFunc withConnectionPool
-
-withConnectionPool :: (Pool Connection -> IO r) -> IO r
-withConnectionPool takeConnectionPool = do
-  errorOrRes <- withDbCache $ \dbCache -> do
-    let combinedConfig = defaultConfig <> cacheConfig dbCache -- <> verboseConfig
-    withConfig combinedConfig $ \db -> withPool (toConnectionString db) takeConnectionPool
-  failE errorOrRes
-
-failE :: Show e => Either e a -> IO a
-failE = either (expectationFailure . show) pure
-
-withPool :: ByteString -> (Pool Connection -> IO a) -> IO a
-withPool connectionString f = createPool (connectPostgreSQL connectionString) close 2 60 10 >>= f
+    it "listen, notify, getNotification (MVar)" $ \pool -> withTimeout $ do
+      var <- newEmptyMVar
+      withResource pool $ \conn -> do
+        _ <- execute_ conn "LISTEN virtual"
+        _ <- execute_ conn "NOTIFY virtual, 'palayloada'"
+        _ <- getNotification conn >>= putMVar var
+        (Notification _ channel payload) <- takeMVar var
+        channel `shouldBe` "virtual"
+        payload `shouldBe` "palayloada"
+    it "listen, getNotification, notify (MVar)" $ \pool -> withTimeout $ do
+      var <- newEmptyMVar
+      withResource pool $ \conn -> do
+        _ <- execute_ conn "LISTEN virtual"
+        _ <- async $ getNotification conn >>= putMVar var
+        _ <- execute_ conn "NOTIFY virtual, 'palayloada'"
+        (Notification _ channel payload) <- takeMVar var
+        channel `shouldBe` "virtual"
+        payload `shouldBe` "palayloada"
