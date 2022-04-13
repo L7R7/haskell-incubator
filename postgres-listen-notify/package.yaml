@@ -1,0 +1,74 @@
+name: postgres-listen-notify
+version: 0.1.0.0
+github: "L7R7/postgres-listen-notify"
+license: BSD3
+author: "Leonhard Riedißer"
+maintainer: "leo008180@googlemail.com"
+copyright: "2022 Leonhard Riedißer"
+
+extra-source-files:
+  - README.md
+  - ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description: Please see the README on GitHub at <https://github.com/L7R7/postgres-listen-notify#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+
+ghc-options:
+  - -fwrite-ide-info
+  - -hiedir=.hie
+  - -Wall
+  - -Wcompat
+  - -Widentities
+  - -Wincomplete-uni-patterns
+  - -Wincomplete-record-updates
+  - -Wredundant-constraints
+  - -fhide-source-paths
+  - -Wpartial-fields
+  - -Wmissing-deriving-strategies
+  - -Wunused-packages
+
+library:
+  source-dirs: src
+  dependencies: []
+  ghc-options:
+    - -O2
+    - -flate-specialise
+    - -fspecialise-aggressively
+    - -Wmissing-export-lists
+
+executables:
+  postgres-listen-notify-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - postgres-listen-notify
+
+tests:
+  postgres-listen-notify-test:
+    main: Spec.hs
+    source-dirs: test
+    build-tools: sydtest-discover
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - async
+      - bytestring
+      - postgresql-simple
+      - resource-pool
+      - sydtest
+      - tmp-postgres
