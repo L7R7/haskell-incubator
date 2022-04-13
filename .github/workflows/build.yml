@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/cache@v2.1.7
+      - uses: actions/cache@v3
         name: Cache ~/.stack
         with:
           path: ~/.stack
@@ -17,7 +17,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.ghc }}-
 
-      - uses: haskell/actions/setup@v1.2.9
+      - uses: haskell/actions/setup@v1.2.10
         with:
           ghc-version: '8.10.7'
           enable-stack: true
