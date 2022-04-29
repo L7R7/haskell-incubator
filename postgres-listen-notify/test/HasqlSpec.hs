@@ -10,7 +10,7 @@ import Test.Syd
 import TestUtils
 
 spec :: Spec
-spec = flaky 3 $ postgresHasqlSpec $ do
+spec = flaky 3 $ sequential $ postgresHasqlSpec $ do
   describe "same connection" $ do
     it "works" $ \pool -> withTimeout $ do
       withResource pool $ \conn -> do
