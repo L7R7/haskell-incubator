@@ -18,6 +18,14 @@ withTimeout action = do
     Left _ -> expectationFailure "timed out"
     Right _ -> pure ()
 
+-- does this make sense?
+withTimeoutS :: SetupFunc ()
+withTimeoutS = SetupFunc $ \action -> do
+  res <- race (threadDelay (3 * 1000000)) (action ())
+  case res of
+    Left _ -> expectationFailure "timed out"
+    Right r -> pure r
+
 postgresSpec :: TestDefM outers (Pool Connection) result -> TestDefM outers oldInner result
 postgresSpec = setupAroundWith $ const setupFuncConnectionPool
 
