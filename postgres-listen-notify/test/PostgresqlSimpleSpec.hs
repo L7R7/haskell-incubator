@@ -11,7 +11,7 @@ import Test.Syd
 import TestUtils
 
 spec :: Spec
-spec = postgresSpec $ do
+spec = flaky 3 $ postgresSpec $ do
   describe "different connections" $ do
     it "needs a sleep" $ \pool -> withTimeout $ do
       withAsync (withResource pool $ \conn -> execute_ conn "LISTEN virtual" >> getNotification conn) $ \asyncNotification -> do
