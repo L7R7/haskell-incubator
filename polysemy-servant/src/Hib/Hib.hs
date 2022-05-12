@@ -21,11 +21,14 @@ where
 
 import Control.Monad.Trans.Except
 import Data.Aeson (FromJSON, ToJSON)
+import Data.ByteString
 import Data.Foldable (traverse_)
 import Data.Function ((&))
 import Data.Text as T
+import Data.Text.Encoding (encodeUtf8)
 import Data.Time
 import Debug.Trace
+import qualified Hib.Cookies as C
 import Lucid.Base
 import Lucid.Html5
 import Network.HTTP.Types (hLocation)
@@ -92,7 +95,10 @@ data LoginAPI mode = LoginAPI
   { loginForm ::
       mode :- ReqBody '[FormUrlEncoded] Login
         :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
-    loginUi :: mode :- QueryParam "ref" LoginRef :> Get '[HTML] (Html ())
+    loginUi ::
+      mode :- C.Cookie "sbLogin" ByteString
+        :> QueryParam "ref" LoginRef
+        :> Get '[HTML] (Html ())
   }
   deriving (Generic)
 
@@ -113,6 +119,9 @@ context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. EmptyContext
 hoist :: CookieSettings -> JWTSettings -> ServerT API Handler
 hoist cookieSettings jwtSettings = hoistServerWithContext (Proxy @API) (Proxy @'[CookieSettings, JWTSettings]) liftServer (server cookieSettings jwtSettings)
 
+instance FromHttpApiData ByteString where
+  parseQueryParam = pure . encodeUtf8
+
 liftServer :: Sem '[Error ServerError, Embed IO] a -> Handler a
 liftServer sem =
   sem
@@ -128,7 +137,7 @@ server cs js =
       loginEndpoints =
         LoginAPI
           { loginForm = checkCreds cs js,
-            loginUi = loginPage
+            loginUi = loginPage js
           },
       logoutEndpoints =
         LogoutAPI
@@ -140,35 +149,50 @@ server cs js =
 redirectRoot :: Sem r (Headers '[Header "Location" URI] String)
 redirectRoot = pure $ addHeader (linkURI nameLink) "root-redirect"
 
-loginPage :: Maybe LoginRef -> Sem r (Html ())
-loginPage maybeRef = pure $
-  html_ $ do
-    head_ $ do
-      title_ "Login"
-    body_ $ do
-      h1_ "Login"
-      refInfo
-      form_ [action_ (toUrlPiece loginFormLink), method_ "POST"] $ do
-        div_ $ do
-          label_ [for_ "username"] "Username"
-          input_ [type_ "username", name_ "username"]
-        div_ $ do
-          label_ [for_ "password"] "Passwort"
-          input_ [type_ "password", name_ "password"]
-        div_ $ do
-          input_ [type_ "submit", name_ "submit"]
-  where
-    refInfo =
-      traverse_
-        ( p_ . \case
-            LoggedOut -> "You've been logged out"
-            Denied -> "login to get access to this resouce"
-            BadCreds -> "the provided credentials are wrong or unknown"
-        )
-        maybeRef
+loginPage ::
+  ( Member (Error ServerError) r,
+    Member (Embed IO) r
+  ) =>
+  JWTSettings ->
+  Maybe (C.CookieVal "sbLogin" ByteString) ->
+  Maybe LoginRef ->
+  Sem r (Html ())
+loginPage js authCookie maybeRef = do
+  maybeUser <- case authCookie of
+    (Just (C.CookieVal (Just bs))) -> embed $ verifyJWT @User js bs
+    _ -> pure Nothing
+  case maybeUser of
+    Just _ -> throw err302 {errHeaders = [(hLocation, toHeader nameLink)]}
+    Nothing -> pure $
+      html_ $ do
+        head_ $ do
+          title_ "Login"
+        body_ $ do
+          h1_ "Login"
+          refInfo
+          form_ [action_ (toUrlPiece loginFormLink), method_ "POST"] $ do
+            div_ $ do
+              label_ [for_ "username"] "Username"
+              input_ [type_ "username", name_ "username"]
+            div_ $ do
+              label_ [for_ "password"] "Passwort"
+              input_ [type_ "password", name_ "password"]
+            div_ $ do
+              input_ [type_ "submit", name_ "submit"]
+      where
+        refInfo =
+          traverse_
+            ( p_ . \case
+                LoggedOut -> "You've been logged out"
+                Denied -> "login to get access to this resouce"
+                BadCreds -> "the provided credentials are wrong or unknown"
+            )
+            maybeRef
 
 checkCreds ::
-  (Member (Embed IO) r, Member (Error ServerError) r) =>
+  ( Member (Embed IO) r,
+    Member (Error ServerError) r
+  ) =>
   CookieSettings ->
   JWTSettings ->
   Login ->

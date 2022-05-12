@@ -42,6 +42,11 @@ spec = waiClientSpecWith application $ do
         context "response status" $ responseStatus resp `shouldBe` found302
         context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "name"
 
+      resp'' <- get "/name"
+      liftIO $
+        context "resource can be accessed" $ do
+          responseStatus resp'' `shouldBe` ok200
+
     it "unauthenticated access to /name leads to redirect to login page" $ do
       resp <- get "/name"
       liftIO $ do
@@ -77,6 +82,24 @@ spec = waiClientSpecWith application $ do
         context "resource can't be accessed" $ do
           responseStatus resp'' `shouldBe` found302
           snd <$> find (\h -> fst h == hLocation) (responseHeaders resp'') `shouldBe` Just "login?ref=denied"
+
+  describe "already authenticated" $ do
+    it "redirects when accessing login page" $ do
+      resp <- request methodPost "/login" [("Content-Type", "application/x-www-form-urlencoded")] "username=AliBaba&password=OpenSesame"
+      liftIO $
+        context "authentication works" $ do
+          responseStatus resp `shouldBe` found302
+          snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "name"
+
+      resp' <- get "/login"
+      liftIO $
+        context "user is already authenticated and is redirected to the resource" $ do
+          responseStatus resp' `shouldBe` found302
+          snd <$> find (\h -> fst h == hLocation) (responseHeaders resp') `shouldBe` Just "name"
+
+    it "if there is something in the login cookie but it's not a valid login, it shows the login page" $ do
+      resp <- request methodGet "/login" [("Cookie", "sbLogin=imAHacker")] ""
+      liftIO $ responseStatus resp `shouldBe` ok200
 
   it "redirects to /name when accessing /" $ do
     resp <- get "/"

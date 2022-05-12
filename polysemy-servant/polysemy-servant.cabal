@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Cib
+      Hib.Cookies
       Hib.Hib
       Lib
       Pib
@@ -39,6 +40,7 @@ library
     , base >=4.7 && <5
     , bytestring
     , containers
+    , cookie
     , http-api-data
     , http-types
     , lucid
