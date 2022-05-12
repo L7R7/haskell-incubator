@@ -78,6 +78,7 @@ tests:
   polysemy-servant-test:
     main: Spec.hs
     source-dirs: test
+    build-tools: sydtest-discover
     ghc-options:
       - -threaded
       - -rtsopts
@@ -89,5 +90,4 @@ tests:
       - http-types
       - servant-server
       - sydtest
-      - sydtest-discover
       - sydtest-wai == 0.2.0.0
