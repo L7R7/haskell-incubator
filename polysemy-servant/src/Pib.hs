@@ -20,7 +20,6 @@ import Control.Monad.Trans.Except
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Function ((&))
 import Data.Time
-import Debug.Trace (trace)
 import qualified Network.Wai.Handler.Warp as Wai
 import Polysemy
 import Polysemy.Error (Error, runError, throw)
@@ -90,14 +89,14 @@ checkCreds cookieSettings jwtSettings Login {username = "AliBaba", password = "O
   case mApplyCookies of
     Nothing -> throw err401
     Just applyCookies -> pure $ applyCookies "logged in"
-checkCreds _ _ Login {username = user} = trace ("Received " ++ user) $ throw err401
+checkCreds _ _ _ = throw err401
 
 logout :: CookieSettings -> Sem r (Headers '[Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] [Char])
 logout cookieSettings = pure $ clearSession cookieSettings "logged out"
 
 nameEndpoint :: (Member (Error ServerError) r) => AuthResult User -> Sem r [Char]
 nameEndpoint (Authenticated (User n _)) = pure n
-nameEndpoint x = trace ("Access Denied " ++ show x) $ throw err401
+nameEndpoint _ = throw err401
 
 startServer :: IO ()
 startServer = do

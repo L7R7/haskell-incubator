@@ -11,7 +11,6 @@ module Cib (someFunc, AuthAPI, application) where
 import Control.Monad.Trans (liftIO)
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Time (secondsToDiffTime)
-import Debug.Trace (trace)
 import GHC.Generics (Generic)
 import Network.Wai.Handler.Warp (run)
 import Servant
@@ -73,7 +72,7 @@ context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. EmptyContext
 
 protected :: Servant.Auth.Server.AuthResult User -> Server Protected
 protected (Servant.Auth.Server.Authenticated (User n _)) = return n
-protected x = trace ("Access Denied " ++ show x) $ throwAll err401
+protected _ = throwAll err401
 
 checkCreds ::
   CookieSettings ->
@@ -83,9 +82,9 @@ checkCreds ::
 checkCreds cookieSettings jwtSettings Login {username = "AliBaba", password = "OpenSesame"} = do
   mApplyCookies <- liftIO $ acceptLogin cookieSettings jwtSettings (User "Ali Baba" "foo")
   case mApplyCookies of
-    Nothing -> trace "Nothing" $ throwError err401
+    Nothing -> throwError err401
     Just applyCookies -> return $ applyCookies NoContent
-checkCreds _ _ Login {username = user, password = _} = trace ("Received " ++ user) (throwError err401)
+checkCreds _ _ _ = throwError err401
 
 application :: IO Application
 application = do

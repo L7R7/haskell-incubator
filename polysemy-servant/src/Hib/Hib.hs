@@ -202,7 +202,7 @@ checkCreds cookieSettings jwtSettings Login {username = "AliBaba", password = "O
   case mApplyCookies of
     Nothing -> throw err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just BadCreds))]}
     Just applyCookies -> pure $ addHeader (linkURI nameLink) $ applyCookies "logged in"
-checkCreds _ _ Login {username = user} = trace ("Received " ++ user) $ throw $ err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just BadCreds))]}
+checkCreds _ _ _ = throw $ err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just BadCreds))]}
 
 logout :: CookieSettings -> Sem r (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] [Char])
 logout cookieSettings = pure $ addHeader (linkURI $ loginLink (Just LoggedOut)) $ clearSession cookieSettings "logged out"
@@ -216,7 +216,7 @@ nameEndpoint (Authenticated (User n _)) = pure $
       h1_ "Welcome back!"
       p_ ("Your name is " <> toHtml n)
       form_ [action_ (toUrlPiece logoutLink), method_ "POST"] $ input_ [type_ "submit", name_ "logout", value_ "logout"]
-nameEndpoint x = trace ("Access Denied " ++ show x) $ throw $ err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just Denied))]}
+nameEndpoint _ = throw $ err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just Denied))]}
 
 startServer :: IO ()
 startServer = do
