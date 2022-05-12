@@ -27,7 +27,6 @@ import Data.Function ((&))
 import Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
 import Data.Time
-import Debug.Trace
 import qualified Hib.Cookies as C
 import Lucid.Base
 import Lucid.Html5
@@ -102,7 +101,7 @@ data LoginAPI mode = LoginAPI
   }
   deriving (Generic)
 
-data LogoutAPI mode = LogoutAPI
+newtype LogoutAPI mode = LogoutAPI
   { logoutEndpoint :: mode :- Verb 'POST 302 '[JSON] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
   }
   deriving (Generic)
