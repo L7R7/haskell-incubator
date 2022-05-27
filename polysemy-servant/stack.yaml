@@ -39,7 +39,10 @@ packages:
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
-extra-deps: []
+extra-deps:
+  - sydtest-webdriver-0.0.0.0@sha256:c1e41ecb9f26b7954679b151792f9a28b1bb2191bf34f72042ac05e114f23ca3,1363
+  - github: georgefst/hs-webdriver
+    commit: cf9c387de7c1525ffbcd58125ccb3f798a97a2bb
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

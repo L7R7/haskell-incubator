@@ -88,6 +88,8 @@ tests:
       - bytestring
       - http-client >= 0.7.11
       - http-types
+      - network-uri
       - servant-server
       - sydtest
-      - sydtest-wai == 0.2.0.0
+      - sydtest-wai
+      - sydtest-webdriver

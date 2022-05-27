@@ -76,6 +76,7 @@ test-suite polysemy-servant-test
       ApiSpecDefinition
       CibSpec
       HibSpec
+      HibWebSpec
       PibSpec
       Paths_polysemy_servant
   hs-source-dirs:
@@ -88,8 +89,10 @@ test-suite polysemy-servant-test
     , bytestring
     , http-client >=0.7.11
     , http-types
+    , network-uri
     , polysemy-servant
     , servant-server
     , sydtest
-    , sydtest-wai ==0.2.0.0
+    , sydtest-wai
+    , sydtest-webdriver
   default-language: Haskell2010
