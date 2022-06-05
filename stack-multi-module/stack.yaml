@@ -1,0 +1,7 @@
+resolver: nightly-2022-06-05
+packages:
+  - bar
+  - baz
+  - foo
+
+extra-deps: []
