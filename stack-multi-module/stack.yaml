@@ -1,5 +1,6 @@
 resolver: nightly-2022-06-05
 packages:
+  - app
   - bar
   - baz
   - foo

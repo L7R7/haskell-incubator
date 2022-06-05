@@ -1,0 +1,27 @@
+name: app
+version: 0.0.0.1
+github: "L7R7/haskell-incubator"
+author: "Leonhard Riedißer"
+maintainer: "leo008180@googlemail.com"
+copyright: "Copyright (c) 2022 Leonhard Riedißer"
+
+extra-source-files: []
+
+dependencies:
+  - base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  dependencies:
+    - foo
+
+executables:
+  main-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - app

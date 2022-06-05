@@ -1,0 +1,42 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           app
+version:        0.0.0.1
+homepage:       https://github.com/L7R7/haskell-incubator#readme
+bug-reports:    https://github.com/L7R7/haskell-incubator/issues
+author:         Leonhard Riedißer
+maintainer:     leo008180@googlemail.com
+copyright:      Copyright (c) 2022 Leonhard Riedißer
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/L7R7/haskell-incubator
+
+library
+  exposed-modules:
+      App
+  other-modules:
+      Paths_app
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , foo
+  default-language: Haskell2010
+
+executable main-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_app
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      app
+    , base >=4.7 && <5
+  default-language: Haskell2010
