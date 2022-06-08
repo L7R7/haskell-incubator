@@ -12,7 +12,7 @@ import Test.Syd.Wai
 spec :: Spec
 spec = waiClientSpecWith application $ do
   describe "authenticating" $ do
-    describe "invalid requests" $ do
+    describe "invalid login requests" $ do
       it "empty post returns 415" $ do
         resp <- post "/login" ""
         liftIO $ responseStatus resp `shouldBe` unsupportedMediaType415
@@ -27,7 +27,7 @@ spec = waiClientSpecWith application $ do
           responseStatus resp `shouldBe` found302
           context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "login?ref=badcreds"
 
-    describe "valid requests" $
+    describe "valid requests" $ do
       it "post with correct Content-Type and valid creds sets cookies and returns 302 with URL to /name" $ do
         resp <- request methodPost "/login" [("Content-Type", "application/x-www-form-urlencoded")] "username=AliBaba&password=OpenSesame"
         let cookies = destroyCookieJar $ responseCookieJar resp
@@ -38,15 +38,14 @@ spec = waiClientSpecWith application $ do
           context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "name"
 
         resp'' <- get "/name"
-        liftIO $
-          context "resource can be accessed" $ do
-            responseStatus resp'' `shouldBe` ok200
+        liftIO $ context "resource can be accessed" $ responseStatus resp'' `shouldBe` ok200
 
-    it "unauthenticated access to /name leads to redirect to login page" $ do
-      resp <- get "/name"
-      liftIO $ do
-        responseStatus resp `shouldBe` found302
-        context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "login?ref=denied"
+      it "/fooo can be accessed after login" $ do
+        resp <- request methodPost "/login" [("Content-Type", "application/x-www-form-urlencoded")] "username=AliBaba&password=OpenSesame"
+        liftIO $ context "login response status" $ responseStatus resp `shouldBe` found302
+
+        resp' <- get "/fooo"
+        liftIO $ context "resource can be accessed" $ responseStatus resp' `shouldBe` ok200
 
   describe "logout" $ do
     let logoutUriString = pack $ show $ linkURI logoutLink
@@ -107,6 +106,19 @@ spec = waiClientSpecWith application $ do
       liftIO $ do
         responseStatus resp `shouldBe` found302
         snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "name"
+
+    describe "unauthenticated access to protected resources redirects to login" $ do
+      it "/name" $ do
+        resp <- get "/name"
+        liftIO $ do
+          responseStatus resp `shouldBe` found302
+          context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "login?ref=denied"
+
+      it "/fooo" $ do
+        resp <- get "/fooo"
+        liftIO $ do
+          responseStatus resp `shouldBe` found302
+          context "location header" $ snd <$> find (\h -> fst h == hLocation) (responseHeaders resp) `shouldBe` Just "login?ref=denied"
 
     it "serves static files" $ do
       resp <- get "static/styles.css"

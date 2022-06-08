@@ -60,7 +60,8 @@ authCheck ::
   IO (AuthResult AuthenticatedUser)
 authCheck connPool (BasicAuthData login password) =
   pure $
-    maybe SAS.Indefinite Authenticated $ M.lookup (login, password) connPool
+    maybe SAS.Indefinite Authenticated $
+      M.lookup (login, password) connPool
 
 type instance BasicAuthCfg = BasicAuthData -> IO (AuthResult AuthenticatedUser)
 

@@ -39,7 +39,14 @@ packages:
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
-extra-deps: []
+extra-deps:
+  - github: haskell-servant/servant
+    commit: 1fba9dc6048cea6184964032b861b052cd54878c
+    subdirs:
+      - servant
+      - servant-server
+      - servant-auth/servant-auth
+      - servant-auth/servant-auth-server
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

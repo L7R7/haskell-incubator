@@ -3,10 +3,62 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    size: 403539
+    subdir: servant
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
+    name: servant
+    version: '0.19'
+    sha256: ee3eebb54d365ffa83f320b568fa36a8ab392a8ded1d559feda5a44894b7f6a0
+    pantry-tree:
+      size: 2949
+      sha256: ce0c502681ffbf5cb48f5606e9a9947e4c956b39ed8ce5b1a590dbaeff112dd9
+  original:
+    subdir: servant
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
+- completed:
+    size: 403539
+    subdir: servant-server
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
+    name: servant-server
+    version: 0.19.1
+    sha256: ee3eebb54d365ffa83f320b568fa36a8ab392a8ded1d559feda5a44894b7f6a0
+    pantry-tree:
+      size: 2727
+      sha256: 2f0df25ed677c6f08aaf1499eec2c82830aedbbe19564d7356ed77cbd49ceeed
+  original:
+    subdir: servant-server
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
+- completed:
+    size: 403539
+    subdir: servant-auth/servant-auth
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
+    name: servant-auth
+    version: 0.4.1.0
+    sha256: ee3eebb54d365ffa83f320b568fa36a8ab392a8ded1d559feda5a44894b7f6a0
+    pantry-tree:
+      size: 426
+      sha256: 1bf99e8eac26c8300a132d47dee816b7c4dbe8ef4b74213a316a61c103def651
+  original:
+    subdir: servant-auth/servant-auth
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
+- completed:
+    size: 403539
+    subdir: servant-auth/servant-auth-server
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
+    name: servant-auth-server
+    version: 0.4.7.0
+    sha256: ee3eebb54d365ffa83f320b568fa36a8ab392a8ded1d559feda5a44894b7f6a0
+    pantry-tree:
+      size: 1469
+      sha256: 6bf429779c3d0e8e591c8e761ca9357fab9558a5d209b019dd4cb65d43c7fdb9
+  original:
+    subdir: servant-auth/servant-auth-server
+    url: https://github.com/haskell-servant/servant/archive/1fba9dc6048cea6184964032b861b052cd54878c.tar.gz
 snapshots:
 - completed:
-    size: 573008
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/12.yaml
-    sha256: 2c73222c0a3fc8fa5a9df5de04038e402351652ea28b48604e15c36b693a168d
-  original: nightly-2022-05-12
+    size: 605110
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/6/6.yaml
+    sha256: 26ea900ee8601fee24ff84981e92f304d384c73ee32d5504299133b5eb177e87
+  original: nightly-2022-06-06

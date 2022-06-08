@@ -4,10 +4,13 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PartialTypeSignatures #-}
 {-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
@@ -83,21 +86,29 @@ type API = NamedRoutes NamedAPI
 
 data NamedAPI mode = NamedAPI
   { rootRedirect :: mode :- Verb 'GET 302 '[HTML] (Headers '[Header "Location" URI] String),
-    protectedApi :: mode :- Auth '[Cookie] User :> "name" :> Get '[HTML] (Html ()),
+    protectedApi :: mode :- Auth '[Cookie] User :> NamedRoutes ProtectedAPI,
     loginEndpoints :: mode :- "login" :> NamedRoutes LoginAPI,
     logoutEndpoints :: mode :- "logout" :> NamedRoutes LogoutAPI,
     raw :: mode :- "static" :> Raw
   }
   deriving (Generic)
 
+data ProtectedAPI mode = ProtectedAPI
+  { protectedNameEndpoint :: mode :- "name" :> Get '[HTML] (Html ()),
+    protectedFoooEndpoint :: mode :- "fooo" :> Get '[HTML] (Html ())
+  }
+  deriving (Generic)
+
 data LoginAPI mode = LoginAPI
   { loginForm ::
-      mode :- ReqBody '[FormUrlEncoded] Login
-        :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
+      mode
+        :- ReqBody '[FormUrlEncoded] Login
+          :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
     loginUi ::
-      mode :- C.Cookie "sbLogin" ByteString
-        :> QueryParam "ref" LoginRef
-        :> Get '[HTML] (Html ())
+      mode
+        :- C.Cookie "sbLogin" ByteString
+          :> QueryParam "ref" LoginRef
+          :> Get '[HTML] (Html ())
   }
   deriving (Generic)
 
@@ -110,7 +121,7 @@ loginFormLink :: Link
 nameLink :: Link
 loginLink :: Maybe LoginRef -> Link
 logoutLink :: Link
-(NamedAPI _ nameLink (LoginAPI loginFormLink loginLink) (LogoutAPI logoutLink) _) = allFieldLinks @NamedAPI
+(NamedAPI _ (ProtectedAPI nameLink _) (LoginAPI loginFormLink loginLink) (LogoutAPI logoutLink) _) = allFieldLinks
 
 context :: CookieSettings -> JWTSettings -> Context '[CookieSettings, JWTSettings]
 context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. EmptyContext
@@ -132,7 +143,18 @@ server :: CookieSettings -> JWTSettings -> NamedAPI (AsServerT (Sem '[Error Serv
 server cs js =
   NamedAPI
     { rootRedirect = redirectRoot,
-      protectedApi = nameEndpoint,
+      protectedApi = \case
+        Authenticated user ->
+          ProtectedAPI
+            { protectedNameEndpoint = nameEndpoint user,
+              protectedFoooEndpoint = foooEndpoint user
+            }
+        _ ->
+          let err = throw $ err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just Denied))]}
+           in ProtectedAPI
+                { protectedNameEndpoint = err,
+                  protectedFoooEndpoint = err
+                },
       loginEndpoints =
         LoginAPI
           { loginForm = checkCreds cs js,
@@ -206,8 +228,8 @@ checkCreds _ _ _ = throw $ err302 {errHeaders = [(hLocation, toHeader $ loginLin
 logout :: CookieSettings -> Sem r (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] [Char])
 logout cookieSettings = pure $ addHeader (linkURI $ loginLink (Just LoggedOut)) $ clearSession cookieSettings "logged out"
 
-nameEndpoint :: (Member (Error ServerError) r) => AuthResult User -> Sem r (Html ())
-nameEndpoint (Authenticated (User n _)) = pure $
+nameEndpoint :: User -> Sem r (Html ())
+nameEndpoint (User n _) = pure $
   html_ $ do
     head_ $ do
       title_ "Welcome"
@@ -215,7 +237,16 @@ nameEndpoint (Authenticated (User n _)) = pure $
       h1_ "Welcome back!"
       p_ ("Your name is " <> toHtml n)
       form_ [action_ (toUrlPiece logoutLink), method_ "POST"] $ input_ [type_ "submit", name_ "logout", value_ "logout"]
-nameEndpoint _ = throw $ err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just Denied))]}
+
+foooEndpoint :: User -> Sem r (Html ())
+foooEndpoint (User n _) = pure $
+  html_ $ do
+    head_ $ do
+      title_ "fooo"
+    body_ $ do
+      h1_ "Here it foooos!"
+      p_ ("Your name is " <> toHtml n)
+      form_ [action_ (toUrlPiece logoutLink), method_ "POST"] $ input_ [type_ "submit", name_ "logout", value_ "logout"]
 
 startServer :: IO ()
 startServer = do
