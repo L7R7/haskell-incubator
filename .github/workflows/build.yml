@@ -23,7 +23,13 @@ jobs:
           enable-stack: true
           stack-version: '2.7.1'
 
-      - name: Build executable
+      - name: Build polysemy-servant
         working-directory: ./polysemy-servant
         run: |
           stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
+
+      - name: Build sydtest-playground
+        working-directory: ./sydtest-playground
+        run: |
+          stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
+

@@ -1,0 +1,66 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           sydtest-playground
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/L7R7/sydtest-playground#readme>
+homepage:       https://github.com/L7R7/sydtest-playground#readme
+bug-reports:    https://github.com/L7R7/sydtest-playground/issues
+author:         Leonhard Riedißer
+maintainer:     leo008180@googlemail.com
+copyright:      2023 Leonhard Riedißer
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/L7R7/sydtest-playground
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_sydtest_playground
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable sydtest-playground-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_sydtest_playground
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , sydtest-playground
+  default-language: Haskell2010
+
+test-suite sydtest-playground-test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Bar.BarSpec
+      Bar.Spec
+      Foo.FooSpec
+      Foo.Spec
+      Paths_sydtest_playground
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , sydtest
+    , sydtest-playground
+  default-language: Haskell2010
