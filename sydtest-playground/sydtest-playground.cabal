@@ -23,44 +23,23 @@ source-repository head
   type: git
   location: https://github.com/L7R7/sydtest-playground
 
-library
-  exposed-modules:
-      Lib
-  other-modules:
-      Paths_sydtest_playground
-  hs-source-dirs:
-      src
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
-  build-depends:
-      base >=4.7 && <5
-  default-language: Haskell2010
-
-executable sydtest-playground-exe
-  main-is: Main.hs
-  other-modules:
-      Paths_sydtest_playground
-  hs-source-dirs:
-      app
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      base >=4.7 && <5
-    , sydtest-playground
-  default-language: Haskell2010
-
 test-suite sydtest-playground-test
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
       Bar.BarSpec
       Bar.Spec
+      Beep.Boop.BoopSpec
+      Beep.Boop.Spec
       Foo.FooSpec
       Foo.Spec
       Paths_sydtest_playground
   hs-source-dirs:
       test
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-tool-depends:
+      sydtest-discover:sydtest-discover
   build-depends:
       base >=4.7 && <5
     , sydtest
-    , sydtest-playground
   default-language: Haskell2010

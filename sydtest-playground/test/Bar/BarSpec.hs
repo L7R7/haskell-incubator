@@ -1,9 +1,12 @@
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeOperators #-}
+
 module Bar.BarSpec where
 
 import Test.Syd
 
-spec :: Spec
+spec :: TestDef (String : otherOuters) ()
 spec = do
   describe "bar bla" $
-    it "bars" $
-      "foo" /= "bar"
+    itWithOuter "bars" $ \s ->
+      s `shouldBe` "bar"
