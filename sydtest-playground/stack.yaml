@@ -3,3 +3,7 @@ resolver:
 
 packages:
   - .
+
+extra-deps:
+  - sydtest-discover-0.0.0.3
+

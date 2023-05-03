@@ -7,6 +7,6 @@ import Test.Syd
 
 spec :: TestDef (String : otherOuters) ()
 spec = do
-  describe "bar bla" $
-    itWithOuter "bars" $ \s ->
-      s `shouldBe` "bar"
+  describe "can access outer resource" $
+    itWithOuter "bar is bar" $
+      \s -> s `shouldBe` "bar"

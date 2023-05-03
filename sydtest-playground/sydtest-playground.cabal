@@ -29,8 +29,9 @@ test-suite sydtest-playground-test
   other-modules:
       Bar.BarSpec
       Bar.Spec
-      Beep.Boop.BoopSpec
-      Beep.Boop.Spec
+      Baz.Qux.QuxSpec
+      Baz.Qux.Spec
+      DoNotDiscover.FooSpec
       Foo.FooSpec
       Foo.Spec
       Paths_sydtest_playground
@@ -38,7 +39,7 @@ test-suite sydtest-playground-test
       test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-tool-depends:
-      sydtest-discover:sydtest-discover
+      sydtest-discover:sydtest-discover >=0.0.0.3
   build-depends:
       base >=4.7 && <5
     , sydtest

@@ -36,7 +36,7 @@ tests:
   sydtest-playground-test:
     main: Main.hs
     source-dirs: test
-    build-tools: sydtest-discover
+    build-tools: sydtest-discover >= 0.0.0.3
     ghc-options:
       - -threaded
       - -rtsopts
