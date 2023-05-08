@@ -1,0 +1,6 @@
+resolver: lts-20.20
+
+packages:
+  - .
+extra-deps:
+  - sydtest-0.15.0.0@sha256:02c57f071c2beb10cc9ac1c2fb48a95cabe587969fbd0bc7e998f89701783bbe,3959

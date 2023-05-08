@@ -3,7 +3,7 @@ name: Build
 on: push
 
 jobs:
-  build-polysemy-servant:
+  build-all:
     name: Build
     runs-on: ubuntu-20.04
     steps:
@@ -30,6 +30,11 @@ jobs:
 
       - name: Build sydtest-playground
         working-directory: ./sydtest-playground
+        run: |
+          stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
+
+      - name: Build form-validation-experiments
+        working-directory: ./form-validation-experiments
         run: |
           stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
 

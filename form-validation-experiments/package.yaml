@@ -1,0 +1,65 @@
+name: form-validation-experiments
+version: 0.1.0.0
+github: "L7R7/haskell-incubator/form-validation-experiments"
+license: BSD3
+author: "Leonhard Riedißer"
+maintainer: "leo008180@googlemail.com"
+copyright: "2023 Leonhard Riedißer"
+language: GHC2021
+
+extra-source-files:
+  - README.md
+  - CHANGELOG.md
+description: Please see the README on GitHub at <https://github.com/L7R7/haskell-incubator/form-validation-experiments#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+
+ghc-options:
+  - -fwrite-ide-info
+  - -hiedir=.hie
+  - -Wall
+  - -Wcompat
+  - -Widentities
+  - -Wincomplete-uni-patterns
+  - -Wincomplete-record-updates
+  - -Wredundant-constraints
+  - -fhide-source-paths
+  - -Wpartial-fields
+  - -Wmissing-deriving-strategies
+  - -Wunused-packages
+  - -Wmissing-export-lists
+
+library:
+  source-dirs: src
+  ghc-options:
+    - -O2
+    - -flate-specialise
+    - -fspecialise-aggressively
+    - -frefinement-level-hole-fits=3
+
+executables:
+  form-validation-experiments-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - form-validation-experiments
+
+tests:
+  form-validation-experiments-test:
+    main: Spec.hs
+    source-dirs: test
+    build-tools: sydtest-discover
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -Wno-missing-export-lists
+      - -Wno-partial-type-signatures
+    dependencies:
+      - form-validation-experiments
+      - sydtest >= 0.15.0.0
