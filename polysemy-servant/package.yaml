@@ -90,4 +90,5 @@ tests:
       - http-types
       - servant-server
       - sydtest
-      - sydtest-wai == 0.2.0.0
+      - sydtest-wai # == 0.2.0.0
+      # - sydtest-webdriver

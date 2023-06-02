@@ -17,7 +17,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver: nightly-2022-06-06
+resolver: lts-20.23
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -40,8 +40,9 @@ packages:
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
 extra-deps:
+  - jose-0.10@sha256:fddc06fefe1ee2a7a5776d4cbc58f2ede6220d25fdeeb12c741c8c3477b6cbcc,3212
   - github: haskell-servant/servant
-    commit: 1fba9dc6048cea6184964032b861b052cd54878c
+    commit: 7ae787371333556a7b84778631ed91d1d73e8370
     subdirs:
       - servant
       - servant-server
