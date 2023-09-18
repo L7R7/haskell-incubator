@@ -26,9 +26,12 @@ source-repository head
 
 library
   exposed-modules:
+      Auth
       Config
       Cookies
       Lib
+      Pages
+      User
   other-modules:
       Paths_servant_type_roles
   hs-source-dirs:
@@ -45,6 +48,7 @@ library
     , http-types
     , lucid
     , mtl
+    , network-uri
     , servant
     , servant-auth
     , servant-auth-server

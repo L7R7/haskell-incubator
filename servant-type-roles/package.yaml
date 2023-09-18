@@ -48,6 +48,7 @@ library:
     - http-types
     - lucid
     - mtl
+    - network-uri
     - servant
     - servant-auth
     - servant-auth-server
