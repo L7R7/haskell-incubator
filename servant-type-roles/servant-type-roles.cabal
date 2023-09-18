@@ -40,6 +40,7 @@ library
     , bytestring
     , containers
     , cookie
+    , either
     , http-api-data
     , http-types
     , lucid

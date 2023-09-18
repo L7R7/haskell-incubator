@@ -23,6 +23,7 @@ import Control.Monad.Reader
 import qualified Cookies as C
 import Data.Aeson (FromJSON, ToJSON)
 import Data.ByteString hiding (elem)
+import Data.Either.Combinators
 import Data.Foldable (traverse_)
 import qualified Data.Map as M
 import Data.Text as T hiding (elem)
@@ -67,11 +68,9 @@ instance ToJSON (UserHasPermission a)
 instance ToJWT (UserHasPermission a)
 
 instance (KnownPermission a) => FromJWT (UserHasPermission a) where
-  decodeJWT val = case (decodeJWT val :: Either Text User) of
-    Left x -> Left x
-    Right usr -> case (userHasPermission usr :: Maybe (UserHasPermission a)) of
-      Nothing -> Left "Not Enough Permission"
-      Just (UserHasPermission u) -> Right (UserHasPermission u)
+  decodeJWT val = do
+    usr <- decodeJWT @User val
+    maybeToRight "Not Enough Permission" (userHasPermission usr)
 
 userHasPermission :: forall (p :: UserPermission). (KnownPermission p) => User -> Maybe (UserHasPermission p)
 userHasPermission usr = if perm `elem` permissions usr then Just (UserHasPermission usr) else Nothing
@@ -134,12 +133,12 @@ data LoginAPI mode = LoginAPI
   { loginForm ::
       mode
         :- ReqBody '[FormUrlEncoded] Login
-          :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
+        :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
     loginUi ::
       mode
         :- C.Cookie "sbLogin" ByteString
-          :> QueryParam "ref" LoginRef
-          :> Get '[HTML] (Html ())
+        :> QueryParam "ref" LoginRef
+        :> Get '[HTML] (Html ())
   }
   deriving (Generic)
 
