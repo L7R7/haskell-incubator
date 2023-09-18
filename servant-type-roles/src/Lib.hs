@@ -113,19 +113,22 @@ instance ToHttpApiData URI where
 
 type API = NamedRoutes NamedAPI
 
+-- | definition of the allowed authentication mechanisms
+type Auths = '[Cookie]
+
 data NamedAPI mode = NamedAPI
   { rootRedirect :: mode :- Verb 'GET 302 '[HTML] (Headers '[Header "Location" URI] String),
-    protectedApi :: mode :- NamedRoutes ProtectedAPI,
+    protectedApi :: mode :- NamedRoutes (ProtectedAPI Auths),
     loginEndpoints :: mode :- "login" :> NamedRoutes LoginAPI,
     logoutEndpoints :: mode :- "logout" :> NamedRoutes LogoutAPI,
     raw :: mode :- "static" :> Raw
   }
   deriving (Generic)
 
-data ProtectedAPI mode = ProtectedAPI
-  { protectedNameEndpoint :: mode :- "name" :> Auth '[Cookie] User :> Get '[HTML] (Html ()),
-    protectedFoooEndpoint :: mode :- "fooo" :> Auth '[Cookie] (UserHasPermission 'FooPermission) :> Get '[HTML] (Html ()),
-    protectedBaarEndpoint :: mode :- "baar" :> Auth '[Cookie] (UserHasPermission 'BarPermission) :> Get '[HTML] (Html ())
+data ProtectedAPI auths mode = ProtectedAPI
+  { protectedNameEndpoint :: mode :- "name" :> Auth auths User :> Get '[HTML] (Html ()),
+    protectedFoooEndpoint :: mode :- "fooo" :> Auth auths (UserHasPermission 'FooPermission) :> Get '[HTML] (Html ()),
+    protectedBaarEndpoint :: mode :- "baar" :> Auth auths (UserHasPermission 'BarPermission) :> Get '[HTML] (Html ())
   }
   deriving (Generic)
 
@@ -133,12 +136,12 @@ data LoginAPI mode = LoginAPI
   { loginForm ::
       mode
         :- ReqBody '[FormUrlEncoded] Login
-        :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
+          :> Verb 'POST 302 '[WhyIsThisNotUnit] (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String),
     loginUi ::
       mode
         :- C.Cookie "sbLogin" ByteString
-        :> QueryParam "ref" LoginRef
-        :> Get '[HTML] (Html ())
+          :> QueryParam "ref" LoginRef
+          :> Get '[HTML] (Html ())
   }
   deriving (Generic)
 
@@ -182,7 +185,7 @@ server cs js =
       raw = serveDirectoryWebApp "static"
     }
 
-protectedServer :: ProtectedAPI (AsServerT App)
+protectedServer :: ProtectedAPI Auths (AsServerT App)
 protectedServer =
   ProtectedAPI
     { protectedNameEndpoint = doOrRedirectToLogin nameEndpoint,
@@ -235,20 +238,22 @@ loginPage js authCookie maybeRef = do
             )
             maybeRef
 
+knownUsers :: M.Map (String, String) User
+knownUsers =
+  M.fromList
+    [ (("AliBaba", "OpenSesame"), User "Ali Baba" "foo" [FooPermission, BarPermission]),
+      (("FooUser", "pass123"), User "FooUser" "pass123" [FooPermission]),
+      (("BarUser", "pass123"), User "BarUser" "pass123" [BarPermission]),
+      (("NooUser", "pass123"), User "NooUser" "pass123" [])
+    ]
+
 checkCreds ::
   CookieSettings ->
   JWTSettings ->
   Login ->
   App (Headers '[Header "Location" URI, Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] String)
 checkCreds cookieSettings jwtSettings (Login u p) = do
-  let logins =
-        M.fromList
-          [ (("AliBaba", "OpenSesame"), User "Ali Baba" "foo" [FooPermission, BarPermission]),
-            (("FooUser", "pass123"), User "FooUser" "pass123" [FooPermission]),
-            (("BarUser", "pass123"), User "BarUser" "pass123" [BarPermission]),
-            (("NooUser", "pass123"), User "NooUser" "pass123" [])
-          ]
-      lookupResult = M.lookup (u, p) logins
+  let lookupResult = M.lookup (u, p) knownUsers
   mApplyCookies <- join <$> traverse (liftIO . acceptLogin cookieSettings jwtSettings) lookupResult
   case mApplyCookies of
     Nothing -> throwError err302 {errHeaders = [(hLocation, toHeader $ loginLink (Just BadCreds))]}
