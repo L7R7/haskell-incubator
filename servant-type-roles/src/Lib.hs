@@ -6,6 +6,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
@@ -33,7 +34,7 @@ import Lucid.Base
 import Lucid.Html5
 import Network.HTTP.Types (hLocation)
 import qualified Network.Wai.Handler.Warp as Wai
-import Servant
+import Servant hiding (BasicAuth, NoSuchUser)
 import Servant.API.Generic
 import Servant.Auth
 import Servant.Auth.Server
@@ -88,6 +89,16 @@ instance FromJSON User
 
 instance FromJWT User
 
+type instance BasicAuthCfg = ()
+
+instance FromBasicAuthData User where
+  fromBasicAuthData (BasicAuthData user pass) () = pure $ maybe NoSuchUser Authenticated (M.lookup (show user, show pass) knownUsers)
+
+instance (KnownPermission a) => FromBasicAuthData (UserHasPermission a) where
+  fromBasicAuthData (BasicAuthData user pass) () = pure $ maybe NoSuchUser Authenticated maybeResult
+    where
+      maybeResult = M.lookup (show user, show pass) knownUsers >>= userHasPermission
+
 data Login = Login {username :: String, password :: String}
   deriving (Eq, Show, Generic)
 
@@ -114,7 +125,7 @@ instance ToHttpApiData URI where
 type API = NamedRoutes NamedAPI
 
 -- | definition of the allowed authentication mechanisms
-type Auths = '[Cookie]
+type Auths = '[BasicAuth, Cookie]
 
 data NamedAPI mode = NamedAPI
   { rootRedirect :: mode :- Verb 'GET 302 '[HTML] (Headers '[Header "Location" URI] String),
@@ -156,11 +167,11 @@ loginLink :: Maybe LoginRef -> Link
 logoutLink :: Link
 (NamedAPI _ (ProtectedAPI nameLink _ _) (LoginAPI loginFormLink loginLink) (LogoutAPI logoutLink) _) = allFieldLinks
 
-context :: CookieSettings -> JWTSettings -> Context '[CookieSettings, JWTSettings]
-context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. EmptyContext
+context :: CookieSettings -> JWTSettings -> Context '[CookieSettings, JWTSettings, ()]
+context cookieCfg jwtConfig = cookieCfg :. jwtConfig :. () :. EmptyContext
 
 hoistedServer :: CookieSettings -> JWTSettings -> NamedAPI (AsServerT Handler)
-hoistedServer cookieSettings jwtSettings = hoistServerWithContext (Proxy @API) (Proxy @'[CookieSettings, JWTSettings]) hoist (server cookieSettings jwtSettings)
+hoistedServer cookieSettings jwtSettings = hoistServerWithContext (Proxy @API) (Proxy @'[CookieSettings, JWTSettings, ()]) hoist (server cookieSettings jwtSettings)
 
 hoist :: App a -> Handler a
 hoist = flip runReaderT (AppEnv Config) . runApp
