@@ -38,3 +38,8 @@ jobs:
         run: |
           stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
 
+      - name: Build servant-type-roles
+        working-directory: ./servant-type-roles
+        run: |
+          stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
+

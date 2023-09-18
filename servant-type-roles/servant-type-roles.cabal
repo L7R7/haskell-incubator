@@ -4,11 +4,11 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 
-name:           polysemy-servant
+name:           servant-type-roles
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/L7R7/polysemy-servant#readme>
-homepage:       https://github.com/L7R7/polysemy-servant#readme
-bug-reports:    https://github.com/L7R7/polysemy-servant/issues
+description:    Please see the README on GitHub at <https://github.com/L7R7/haskell-incubator/servant-type-roles#readme>
+homepage:       https://github.com/L7R7/haskell-incubator#readme
+bug-reports:    https://github.com/L7R7/haskell-incubator/issues
 author:         Leonhard Riedißer
 maintainer:     leo008180@googlemail.com
 copyright:      2022 Leonhard Riedißer
@@ -21,17 +21,16 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/L7R7/polysemy-servant
+  location: https://github.com/L7R7/haskell-incubator
+  subdir: servant-type-roles
 
 library
   exposed-modules:
-      Cib
-      Hib.Cookies
-      Hib.Hib
+      Config
+      Cookies
       Lib
-      Pib
   other-modules:
-      Paths_polysemy_servant
+      Paths_servant_type_roles
   hs-source-dirs:
       src
   ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -O2 -flate-specialise -fspecialise-aggressively -Wmissing-export-lists
@@ -45,7 +44,6 @@ library
     , http-types
     , lucid
     , mtl
-    , polysemy
     , servant
     , servant-auth
     , servant-auth-server
@@ -53,31 +51,27 @@ library
     , servant-server
     , text
     , time
-    , transformers
     , warp
   default-language: Haskell2010
 
-executable polysemy-servant-exe
+executable servant-type-roles-exe
   main-is: Main.hs
   other-modules:
-      Paths_polysemy_servant
+      Paths_servant_type_roles
   hs-source-dirs:
       app
   ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
-    , polysemy-servant
+    , servant-type-roles
   default-language: Haskell2010
 
-test-suite polysemy-servant-test
+test-suite servant-type-roles-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      ApiSpecDefinition
-      CibSpec
-      HibSpec
-      PibSpec
-      Paths_polysemy_servant
+      ServerSpec
+      Paths_servant_type_roles
   hs-source-dirs:
       test
   ghc-options: -fwrite-ide-info -hiedir=.hie -Wall -Wcompat -Widentities -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -fhide-source-paths -Wpartial-fields -Wmissing-deriving-strategies -Wunused-packages -threaded -rtsopts -with-rtsopts=-N
@@ -86,10 +80,8 @@ test-suite polysemy-servant-test
   build-depends:
       base >=4.7 && <5
     , bytestring
-    , http-client >=0.7.11
-    , http-types
-    , polysemy-servant
     , servant-server
+    , servant-type-roles
     , sydtest
     , sydtest-wai
   default-language: Haskell2010

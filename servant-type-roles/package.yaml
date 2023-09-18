@@ -1,6 +1,6 @@
-name: polysemy-servant
+name: servant-type-roles
 version: 0.1.0.0
-github: "L7R7/polysemy-servant"
+github: "L7R7/haskell-incubator/servant-type-roles"
 license: BSD3
 author: "Leonhard Riedißer"
 maintainer: "leo008180@googlemail.com"
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description: Please see the README on GitHub at <https://github.com/L7R7/polysemy-servant#readme>
+description: Please see the README on GitHub at <https://github.com/L7R7/haskell-incubator/servant-type-roles#readme>
 
 dependencies:
   - base >= 4.7 && < 5
@@ -47,7 +47,6 @@ library:
     - http-types
     - lucid
     - mtl
-    - polysemy
     - servant
     - servant-auth
     - servant-auth-server
@@ -55,7 +54,6 @@ library:
     - servant-server
     - text
     - time
-    - transformers
     - warp
   ghc-options:
     - -O2
@@ -64,7 +62,7 @@ library:
     - -Wmissing-export-lists
 
 executables:
-  polysemy-servant-exe:
+  servant-type-roles-exe:
     main: Main.hs
     source-dirs: app
     ghc-options:
@@ -72,10 +70,10 @@ executables:
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
-      - polysemy-servant
+      - servant-type-roles
 
 tests:
-  polysemy-servant-test:
+  servant-type-roles-test:
     main: Spec.hs
     source-dirs: test
     build-tools: sydtest-discover
@@ -84,10 +82,8 @@ tests:
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
-      - polysemy-servant
+      - servant-type-roles
       - bytestring
-      - http-client >= 0.7.11
-      - http-types
       - servant-server
       - sydtest
-      - sydtest-wai # == 0.2.0.0
+      - sydtest-wai

@@ -1,0 +1,15 @@
+###
+
+# curl -v -d "username=AliBaba&password=OpenSesame" -X POST localhost:8080/login
+POST localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=AliBaba&password=OpenSesame
+
+###
+
+GET localhost:8080/name
+
+###
+
+GET localhost:8080/logout
