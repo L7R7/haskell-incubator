@@ -1,0 +1,4 @@
+config-int: 1
+config-list:
+  - "foo"
+  - "bar"

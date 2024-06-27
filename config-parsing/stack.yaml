@@ -1,0 +1,22 @@
+resolver: lts-22.26
+
+packages:
+  - .
+
+extra-deps:
+  - github: NorfairKing/opt-env-conf
+    commit: 90c5f8b31cf31819d339debc838cd0f029ce4728
+    subdirs:
+      - opt-env-conf
+  - github: NorfairKing/safe-coloured-text
+    commit: 61f14d21b7399fe97da24e484c2f9fedaf532bb8
+    subdirs:
+      - safe-coloured-text
+      - safe-coloured-text-layout
+      - safe-coloured-text-gen
+  - github: NorfairKing/autodocodec
+    commit: 36779707f38ec3aeb0a591ff8043a63717c96ea2
+    subdirs:
+      - autodocodec
+      - autodocodec-yaml
+      - autodocodec-schema
