@@ -1,0 +1,87 @@
+[36mUsage: [m[33mmy-prog[m [37m--config-file[m [33mFILE[m [37m--int[m[36m|[m[37m-i[m [33mINT[m [37m--string[m[36m|[m[37m-s[m [33mSTR[m [37m--list[m[36m|[m[37m-l[m [33mLIST[m [35mfoo[m [36m|[m [35mbar[m [33mINT[m [36m|[m [35mbaz[m [37m--execute[m[36m|[m[37m-x[m [36m|[m [35mqux[m [35mone[m [33mSEVERITY[m [36m|[m [35mtwo[m [33mTXT[m [37m--execute[m[36m|[m[37m-x[m
+
+[36mAll settings[m:
+  [34mPath to the configuration file[m
+  option: [37m--config-file[m [33mFILE[m
+  env: [37mCONFIG_FILE[m [33mFILE[m
+  
+  [34mnumber of something[m
+  option: [37m--int[m[36m|[m[37m-i[m [33mINT[m
+  env: [37mFOO_INT[m [33mINT[m
+  config: [37mconfig-int[m: [33m<number>[m # [32m64 bit signed integer[m
+  
+  [34mthis is a string[m
+  option: [37m--string[m[36m|[m[37m-s[m [33mSTR[m
+  env: [37mFOO_STRING[m [33mSTR[m
+  config: [37mconfig-string[m: [33m<string>[m
+  
+  [34mlist of somethings[m
+  option: [37m--list[m[36m|[m[37m-l[m [33mLIST[m
+  env: [37mFOO_LIST[m [33mLIST[m
+  config: [37mconfig-list[m: - [33m<string>[m
+  
+  [34mFoo[m
+  command: [35mfoo[m
+  
+  [34mBar[m
+  command: [35mbar[m
+    [34mbar things[m
+    argument: [33mINT[m
+    
+  
+  [34mBaz[m
+  command: [35mbaz[m
+    [34mControl whether to actually execute things or perform a dry run[m
+    switch: [37m--execute[m[36m|[m[37m-x[m
+    
+  
+  [34mQux[m
+  command: [35mqux[m
+    [34mfirst subcommand[m
+    command: [35mone[m
+      [34mseverity level[m
+      argument: [33mSEVERITY[m
+      
+    
+    [34msecond subcommand[m
+    command: [35mtwo[m
+      [34mlorem ipsum[m
+      argument: [33mTXT[m
+      
+    
+    [34mControl whether to actually execute things or perform a dry run[m
+    switch: [37m--execute[m[36m|[m[37m-x[m
+    
+  
+
+[36mOptions[m:
+  [37m--config-file[m [34mPath to the configuration file[m 
+  [37m--int[m[36m|[m[37m-i[m [34mnumber of something[m 
+  [37m--string[m[36m|[m[37m-s[m [34mthis is a string[m 
+  [37m--list[m[36m|[m[37m-l[m [34mlist of somethings[m 
+  [35mfoo[m [34mFoo[m
+  [35mbar[m [34mBar[m
+      [33mINT[m [34mbar things[m 
+  [35mbaz[m [34mBaz[m
+      [37m--execute[m[36m|[m[37m-x[m [34mControl whether to actually execute things or perform a dry run[m default: [33mDryRun[m
+  [35mqux[m [34mQux[m
+      [35mone[m [34mfirst subcommand[m
+          [33mSEVERITY[m [34mseverity level[m 
+      [35mtwo[m [34msecond subcommand[m
+          [33mTXT[m [34mlorem ipsum[m 
+      [37m--execute[m[36m|[m[37m-x[m [34mControl whether to actually execute things or perform a dry run[m default: [33mDryRun[m
+
+[36mEnvironment Variables[m:
+  [37mCONFIG_FILE[m [33mFILE[m   [34mPath to the configuration file[m
+  [37mFOO_INT[m [33mINT[m        [34mnumber of something[m           
+  [37mFOO_STRING[m [33mSTR[m     [34mthis is a string[m              
+  [37mFOO_LIST[m [33mLIST[m      [34mlist of somethings[m            
+
+[36mConfiguration Values[m:
+  [34mnumber of something[m
+  [37mconfig-int[m: [33m<number>[m # [32m64 bit signed integer[m
+  [34mthis is a string[m
+  [37mconfig-string[m: [33m<string>[m
+  [34mlist of somethings[m
+  [37mconfig-list[m: - [33m<string>[m
+

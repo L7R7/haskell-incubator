@@ -58,13 +58,18 @@ test-suite config-parsing-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      LibSpec
       Paths_config_parsing
   autogen-modules:
       Paths_config_parsing
   hs-source-dirs:
       test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-tool-depends:
+      sydtest-discover:sydtest-discover
   build-depends:
       base >=4.7 && <5
     , config-parsing
+    , opt-env-conf-test
+    , sydtest
   default-language: Haskell2010

@@ -2,6 +2,7 @@
 
 module Lib
   ( someFunc,
+    Config (..),
   )
 where
 
