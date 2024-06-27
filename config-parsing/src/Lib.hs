@@ -108,3 +108,8 @@ instance HasParser SubCommand where
       [ command "one" "first subcommand" $ SubOne <$> setting [help "severity level", reader auto, argument, metavar "SEVERITY"],
         command "two" "second subcommand" $ SubTwo <$> setting [help "lorem ipsum", reader str, argument, metavar "TXT"]
       ]
+
+{-
+ * if I call it with qux --help, the whole help is printed. Maybe it makes sense to only print the help text for the subcommand? Especially for more complicated, nested Parsers
+ * if more than one setting is missing, only the first is reported. Is it possible to report all of them at once?
+-}
