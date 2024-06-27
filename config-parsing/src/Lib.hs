@@ -113,4 +113,13 @@ instance HasParser SubCommand where
 {-
  * if I call it with qux --help, the whole help is printed. Maybe it makes sense to only print the help text for the subcommand? Especially for more complicated, nested Parsers
  * if more than one setting is missing, only the first is reported. Is it possible to report all of them at once?
+ * what about nested yaml? Something like
+   config:
+     a: 1
+     b: "2"
+     c:
+       d: true
+       e:
+        - "lorem"
+        - "ipsum"
 -}
