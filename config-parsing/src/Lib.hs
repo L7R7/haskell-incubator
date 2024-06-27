@@ -7,13 +7,13 @@ where
 
 import Data.List.NonEmpty
 import Data.Version
-import Debug.Trace
 import OptEnvConf
-import System.Directory (getHomeDirectory)
+import Path
+import Path.IO
 
 someFunc :: IO ()
 someFunc = do
-  let version = makeVersion [0] -- what if my version is a string?
+  let version = makeVersion [0]
   c <- runSettingsParser version
   print (c :: Config)
 
@@ -25,14 +25,17 @@ data Config = Config
   }
   deriving stock (Eq, Show)
 
-homedirParser :: Parser FilePath
-homedirParser = mapIO (const getHomeDirectory) (pure ())
+homeParser :: Parser (Path Abs Dir)
+homeParser = mapIO (const getHomeDir) (pure ())
+
+-- is that a correct way to assemble a parser that reads from the config file in the home directory?
+withHomeDirYamlConfig :: Parser a -> Parser a
+withHomeDirYamlConfig = withYamlConfig $ mapIO (\home -> Just . toFilePath <$> resolveFile home "config.yaml") homeParser
 
 instance HasParser Config where
   settingsParser =
-    -- 1. is that a correct way to assemble a parser that reads from the config file in the home directory?
-    -- 2. it seems that only one of the files is taken into account when looking for options
-    withYamlConfig ((\home -> Just $ home <> "/config.yaml") <$> homedirParser) $
+    -- it seems that only one of the files is taken into account when looking for options, am I missing something?
+    withHomeDirYamlConfig $
       withLocalYamlConfig $
         Config
           <$> setting

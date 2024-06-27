@@ -37,7 +37,8 @@ library:
   source-dirs: src
   dependencies:
     - opt-env-conf
-    - directory
+    - path
+    - path-io
 
 executables:
   config-parsing-exe:
