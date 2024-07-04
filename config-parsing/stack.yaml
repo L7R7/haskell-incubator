@@ -5,7 +5,7 @@ packages:
 
 extra-deps:
   - github: NorfairKing/opt-env-conf
-    commit: 90c5f8b31cf31819d339debc838cd0f029ce4728
+    commit: 48d2d9d3fb26164094591c856c63eef9b88c25fd
     subdirs:
       - opt-env-conf
       - opt-env-conf-test

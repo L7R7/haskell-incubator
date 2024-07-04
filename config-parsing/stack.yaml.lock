@@ -7,29 +7,29 @@ packages:
 - completed:
     name: opt-env-conf
     pantry-tree:
-      sha256: 4dec0c021fb8b706ec8152f3c624a9330f6b9fb84e3ac7ab95147ebcae6b7da5
+      sha256: 229ce5f5319dc0e99dbb7efbd6424934382cee7e935c0bfcd086dc984b799aae
       size: 1069
-    sha256: c20d1f4971f42828bedc696249efadf5d20cefa18b20c9bdeca714d1d2bde4f5
-    size: 51785
+    sha256: 1d37d3201cf1889d0e2948dd6af17f750c2fca625feb69a97f1f6173a478930c
+    size: 53791
     subdir: opt-env-conf
-    url: https://github.com/NorfairKing/opt-env-conf/archive/90c5f8b31cf31819d339debc838cd0f029ce4728.tar.gz
+    url: https://github.com/NorfairKing/opt-env-conf/archive/48d2d9d3fb26164094591c856c63eef9b88c25fd.tar.gz
     version: 0.0.0.0
   original:
     subdir: opt-env-conf
-    url: https://github.com/NorfairKing/opt-env-conf/archive/90c5f8b31cf31819d339debc838cd0f029ce4728.tar.gz
+    url: https://github.com/NorfairKing/opt-env-conf/archive/48d2d9d3fb26164094591c856c63eef9b88c25fd.tar.gz
 - completed:
     name: opt-env-conf-test
     pantry-tree:
-      sha256: a0f6db0b1b0131e7df4b04bbb187642c2d9b11dc6c73dce05ee9588c9be1ce52
-      size: 13255
-    sha256: c20d1f4971f42828bedc696249efadf5d20cefa18b20c9bdeca714d1d2bde4f5
-    size: 51785
+      sha256: 50399001da1fe44491e6d95d534b2140c747bbf33fb8c0a35dabaf3d8e77aab9
+      size: 14262
+    sha256: 1d37d3201cf1889d0e2948dd6af17f750c2fca625feb69a97f1f6173a478930c
+    size: 53791
     subdir: opt-env-conf-test
-    url: https://github.com/NorfairKing/opt-env-conf/archive/90c5f8b31cf31819d339debc838cd0f029ce4728.tar.gz
+    url: https://github.com/NorfairKing/opt-env-conf/archive/48d2d9d3fb26164094591c856c63eef9b88c25fd.tar.gz
     version: 0.0.0.0
   original:
     subdir: opt-env-conf-test
-    url: https://github.com/NorfairKing/opt-env-conf/archive/90c5f8b31cf31819d339debc838cd0f029ce4728.tar.gz
+    url: https://github.com/NorfairKing/opt-env-conf/archive/48d2d9d3fb26164094591c856c63eef9b88c25fd.tar.gz
 - completed:
     name: safe-coloured-text
     pantry-tree:

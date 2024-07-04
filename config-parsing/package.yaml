@@ -36,6 +36,8 @@ ghc-options:
 library:
   source-dirs: src
   dependencies:
+    - aeson
+    - autodocodec-yaml
     - opt-env-conf
     - path
     - path-io

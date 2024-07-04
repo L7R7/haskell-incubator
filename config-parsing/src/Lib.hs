@@ -6,6 +6,10 @@ module Lib
   )
 where
 
+import Autodocodec.Yaml
+import Control.Monad
+import Data.Aeson
+import Data.Aeson.KeyMap (unionWith)
 import Data.List.NonEmpty
 import Data.Version
 import OptEnvConf
@@ -27,17 +31,21 @@ data Config = Config
   deriving stock (Eq, Show)
 
 homeParser :: Parser (Path Abs Dir)
-homeParser = mapIO (const getHomeDir) (pure ())
+homeParser = mapIO id (pure getHomeDir)
 
--- is that a correct way to assemble a parser that reads from the config file in the home directory?
-withHomeDirYamlConfig :: Parser a -> Parser a
-withHomeDirYamlConfig = withYamlConfig $ mapIO (\home -> Just . toFilePath <$> resolveFile home "config.yaml") homeParser
+homeDirConfig :: Parser FilePath
+homeDirConfig = mapIO (\home -> toFilePath <$> resolveFile home "config.yaml") homeParser
+
+localConfig :: Parser FilePath
+localConfig = mapIO id (pure (toFilePath <$> resolveFile' "config.yaml"))
+
+combinedConfigs :: Parser (NonEmpty FilePath)
+combinedConfigs = sequenceA $ localConfig :| [homeDirConfig]
 
 instance HasParser Config where
   settingsParser =
-    -- it seems that only one of the files is taken into account when looking for options, am I missing something?
-    withHomeDirYamlConfig $
-      withLocalYamlConfig $
+    subConfig "sup" $
+      withYamlConfigs combinedConfigs $
         Config
           <$> setting
             [ help "number of something",
@@ -110,16 +118,19 @@ instance HasParser SubCommand where
         command "two" "second subcommand" $ SubTwo <$> setting [help "lorem ipsum", reader str, argument, metavar "TXT"]
       ]
 
-{-
- * if I call it with qux --help, the whole help is printed. Maybe it makes sense to only print the help text for the subcommand? Especially for more complicated, nested Parsers
- * if more than one setting is missing, only the first is reported. Is it possible to report all of them at once?
- * what about nested yaml? Something like
-   config:
-     a: 1
-     b: "2"
-     c:
-       d: true
-       e:
-        - "lorem"
-        - "ipsum"
--}
+withYamlConfigs :: Parser (NonEmpty FilePath) -> Parser a -> Parser a
+withYamlConfigs parsers = withConfig $ mapIO (foldM resolveYamlConfigFile Nothing) parsers
+  where
+    resolveYamlConfigFile :: Maybe Object -> FilePath -> IO (Maybe Object)
+    resolveYamlConfigFile acc = fmap (combineMaybeObjects acc . join) . (resolveFile' >=> readYamlConfigFile)
+    -- left biased, first one wins
+    combineMaybeObjects :: Maybe Object -> Maybe Object -> Maybe Object
+    combineMaybeObjects Nothing mo = mo
+    combineMaybeObjects mo Nothing = mo
+    combineMaybeObjects (Just o1) (Just o2) = Just (combineObjects o1 o2)
+      where
+        combineObjects :: Object -> Object -> Object
+        combineObjects = unionWith combineValues
+        combineValues :: Value -> Value -> Value
+        combineValues (Object o) (Object o') = Object (combineObjects o o')
+        combineValues v _ = v
