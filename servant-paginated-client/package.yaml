@@ -1,0 +1,74 @@
+name: servant-paginated-client
+version: 0.1.0.0
+github: "L7R7/haskell-incubator/servant-paginated-client"
+license: BSD3
+author: "Leonhard Riedißer"
+maintainer: "leo008180@googlemail.com"
+copyright: "2024 Leonhard Riedißer"
+
+extra-source-files:
+  - README.md
+  - ChangeLog.md
+
+description: Please see the README on GitHub at <https://github.com/L7R7/haskell-incubator/servant-type-roles#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+
+ghc-options:
+  - -fwrite-ide-info
+  - -hiedir=.hie
+  - -Wall
+  - -Wcompat
+  - -Widentities
+  - -Wincomplete-uni-patterns
+  - -Wincomplete-record-updates
+  - -Wredundant-constraints
+  - -fhide-source-paths
+  - -Wpartial-fields
+  - -Wmissing-deriving-strategies
+  - -Wunused-packages
+
+library:
+  source-dirs: src
+  dependencies:
+    - http-client
+    - http-link-header
+    - mtl
+    - servant
+    - servant-client
+    - servant-server
+    - text
+    - utf8-string
+    - warp
+  ghc-options:
+    - -O2
+    - -flate-specialise
+    - -fspecialise-aggressively
+    - -Wmissing-export-lists
+
+executables:
+  servant-paginated-client-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - servant-paginated-client
+
+tests:
+  servant-paginated-client-test:
+    main: Spec.hs
+    source-dirs: test
+    build-tools: sydtest-discover
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - servant-paginated-client
+      - servant-server
+      - sydtest
+      - sydtest-servant

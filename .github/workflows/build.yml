@@ -43,3 +43,8 @@ jobs:
         run: |
           stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
 
+      - name: Build servant-paginated-client
+        working-directory: ./servant-paginated-client
+        run: |
+          stack build --system-ghc --test --coverage --copy-bins --local-bin-path .
+
