@@ -7,6 +7,9 @@ import Test.Syd.Servant
 
 spec :: Spec
 spec = do
+  it "documents the API in a golden file" $ do
+    let apiStructure = layout (Proxy :: Proxy API)
+    pureGoldenTextFile "test_resources/api/api-structure.txt" apiStructure
   servantSpec (Proxy :: Proxy API) server $ do
     it "single endpoint" $ do
       res <- singleClient

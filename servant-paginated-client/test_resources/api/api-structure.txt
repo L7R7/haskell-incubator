@@ -1,0 +1,10 @@
+/
+├─ contents/
+│  └─•
+├─ nested/
+│  ├─ bar/
+│  │  └─•
+│  └─ foo/
+│     └─•
+└─ single-content/
+   └─•
