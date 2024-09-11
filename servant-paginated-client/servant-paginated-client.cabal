@@ -38,7 +38,6 @@ library
     , http-client
     , http-link-header
     , mtl
-    , servant
     , servant-client
     , servant-server
     , text
