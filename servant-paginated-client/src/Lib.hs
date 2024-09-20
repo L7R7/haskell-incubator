@@ -64,7 +64,7 @@ startServer = do
 clientRecord :: NamedAPI (AsClientT ClientM)
 clientRecord = wrapPagination $ client (Proxy :: Proxy API)
 
-paginatedClient :: Maybe Int -> ClientM (Headers '[Header "Link" Text] [Int])
+paginatedClient :: Maybe Int -> Maybe PaginationConfig -> ClientM (Headers '[Header "Link" Text] [Int])
 paginatedClient = paginatedContent clientRecord
 
 singleClient :: ClientM Int

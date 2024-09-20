@@ -1,6 +1,7 @@
 module ServerSpec (spec) where
 
 import Lib
+import Pagination
 import Servant
 import Test.Syd
 import Test.Syd.Servant
@@ -14,6 +15,18 @@ spec = do
     it "single endpoint" $ do
       res <- singleClient
       liftIO $ res `shouldBe` 5
-    it "list endpoint" $ do
-      (Headers res _) <- paginatedClient Nothing
+    it "list endpoint (full content)" $ do
+      (Headers res _) <- paginatedClient Nothing Nothing
       liftIO $ res `shouldBe` [0 .. 59]
+    it "list endpoint (with limit)" $ do
+      (Headers res _) <- paginatedClient Nothing (Just (PaginationConfig 10))
+      liftIO $ res `shouldBe` [0 .. 9]
+    it "list endpoint (with limit higher than available elements)" $ do
+      (Headers res _) <- paginatedClient Nothing (Just (PaginationConfig 100))
+      liftIO $ res `shouldBe` [0 .. 59]
+    it "list endpoint (with 0 as limit)" $ do
+      (Headers res _) <- paginatedClient Nothing (Just (PaginationConfig 0))
+      liftIO $ res `shouldBe` []
+    it "list endpoint (with negative limit)" $ do
+      (Headers res _) <- paginatedClient Nothing (Just (PaginationConfig (-5)))
+      liftIO $ res `shouldBe` []
