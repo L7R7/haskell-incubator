@@ -17,7 +17,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.ghc }}-
 
-      - uses: haskell-actions/setup@v2.7.6
+      - uses: haskell-actions/setup@v2.7.7
         with:
           ghc-version: '8.10.7'
           enable-stack: true
